@@ -53,43 +53,53 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    # Stap 2: Toon alle bestanden in de root van de repository
+    # Stap 2: Toon bestanden in de repository
     - name: List files in repository
       run: ls -R
       working-directory: .
 
-    # Stap 3: Installeer .NET (8.0.x)
+    # Stap 3: Setup .NET (8.0.x)
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
 
-    # Stap 4: Ga naar OnderhoudsbuddyDotnet map
-    - name: Move to OnderhoudsbuddyDotnet directory
-      working-directory: OnderhoudsbuddyDotnet
-      run: ls -la
-
-    # Stap 5: Restore dependencies
+    # Stap 4: Restore dependencies
     - name: Restore dependencies
       working-directory: OnderhoudsbuddyDotnet
       run: dotnet restore OnderhoudsbuddyDotnet.sln
 
-    # Stap 6: Build de oplossing
+    # Stap 5: Build de oplossing
     - name: Build solution
       working-directory: OnderhoudsbuddyDotnet
       run: dotnet build OnderhoudsbuddyDotnet.sln --no-restore --configuration Release
 
-    # Stap 7: Publiceer naar de map ./publish
+  publish:
+    runs-on: ubuntu-latest
+    needs: build   # Wacht tot de 'build' job is voltooid
+
+    steps:
+    # Stap 1: Checkout de code (opnieuw uitgevoerd voor een schone werkomgeving)
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    # Stap 2: Setup .NET (8.0.x)
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    # Stap 3: Publiceer de oplossing
     - name: Publish project
       working-directory: OnderhoudsbuddyDotnet
       run: dotnet publish OnderhoudsbuddyDotnet.sln --configuration Release --output ./publish
 
-    # Stap 8: Controleer inhoud van de publicatiemap
+    # Stap 4: Controleer inhoud van de publicatiemap
     - name: Validate publish output
       working-directory: OnderhoudsbuddyDotnet/publish
       run: ls -la
 
-    # Stap 9: Upload gepubliceerde artefacten
+    # Stap 5: Upload gepubliceerde artefacten
     - name: Upload published artifacts
       uses: actions/upload-artifact@v4
       with:
