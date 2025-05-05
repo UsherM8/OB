@@ -1,0 +1,6 @@
+@OnderhoudsbuddyWeb_HostAddress = http://localhost:5113
+
+GET {{OnderhoudsbuddyWeb_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
