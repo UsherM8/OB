@@ -53,27 +53,32 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    # Stap 2: Installeren van de gewenste .NET Core SDK (8.0)
+    # Stap 2: Installeer .NET omgeving
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
 
-    # Stap 3: Herstellen van afhankelijkheden
+    # Stap 3: Ga naar de map met de .sln file
+    - name: Move to project directory
+      working-directory: OnderhoudsbuddyDotnet
+      run: echo "Navigated to OnderhoudsbuddyDotnet directory"
+
+    # Stap 4: Restore dependencies
     - name: Restore dependencies
       run: dotnet restore OnderhoudsbuddyDotnet.sln
 
-    # Stap 4: Builden van het project
-    - name: Build solution
+    # Stap 5: Build de oplossing
+    - name: Build project
       run: dotnet build OnderhoudsbuddyDotnet.sln --no-restore --configuration Release
 
-    # Stap 5: Publiceren van de build artefacten
-    - name: Publish
+    # Stap 6: Publiceer de build artefacten
+    - name: Publish output
       run: dotnet publish OnderhoudsbuddyDotnet.sln --configuration Release --output ./publish
 
-    # Stap 6: Optioneel uploaden van de gepubliceerde artefacten
+    # Stap 7: Upload de artefacten (optioneel)
     - name: Upload published artifacts
       uses: actions/upload-artifact@v4
       with:
         name: OnderhoudsbuddyDotnet-Publish
-        path: ./publish
+        path: OnderhoudsbuddyDotnet/publish
