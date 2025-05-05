@@ -53,30 +53,38 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    # Stap 2: Installeer .NET omgeving
+    # Stap 2: Controleer bestanden in de Rootmap (OB)
+    - name: List files in root of repository
+      run: ls -R
+      working-directory: .
+
+    # Stap 3: Setup .NET (8.0.x)
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
 
-    # Stap 3: Ga naar de map met de .sln file
-    - name: Move to project directory
+    # Stap 4: Move naar OnderhoudsbuddyDotnet map
+    - name: Move to OnderhoudsbuddyDotnet directory
       working-directory: OnderhoudsbuddyDotnet
-      run: echo "Navigated to OnderhoudsbuddyDotnet directory"
+      run: ls -la # Controleer of de .sln hier zit
 
-    # Stap 4: Restore dependencies
+    # Stap 5: Restore de oplossing
     - name: Restore dependencies
+      working-directory: OnderhoudsbuddyDotnet
       run: dotnet restore OnderhoudsbuddyDotnet.sln
 
-    # Stap 5: Build de oplossing
-    - name: Build project
+    # Stap 6: Build de oplossing
+    - name: Build solution
+      working-directory: OnderhoudsbuddyDotnet
       run: dotnet build OnderhoudsbuddyDotnet.sln --no-restore --configuration Release
 
-    # Stap 6: Publiceer de build artefacten
-    - name: Publish output
+    # Stap 7: Publiceer de build artefacten
+    - name: Publish project
+      working-directory: OnderhoudsbuddyDotnet
       run: dotnet publish OnderhoudsbuddyDotnet.sln --configuration Release --output ./publish
 
-    # Stap 7: Upload de artefacten (optioneel)
+    # Stap 8: Upload de gepubliceerde artefacten
     - name: Upload published artifacts
       uses: actions/upload-artifact@v4
       with:
