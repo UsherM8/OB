@@ -36,7 +36,7 @@
 # For a complete CI/CD sample to get started with GitHub Action workflows for Desktop Applications,
 # refer to https://github.com/microsoft/github-actions-for-desktop-apps
 
-name: ASP.NET Core CI/CD Workflow
+name: Build and Publish OnderhoudsbuddyDotnet
 
 on:
   push:
@@ -53,25 +53,27 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    # Stap 2: Setup .NET Core (specificaat versie 8.0)
+    # Stap 2: Installeren van de gewenste .NET Core SDK (8.0)
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
 
-    # Stap 3: Installeer afhankelijkheden (restore pakketten)
-    - name: Install dependencies
-      run: dotnet restore
+    # Stap 3: Herstellen van afhankelijkheden
+    - name: Restore dependencies
+      run: dotnet restore OnderhoudsbuddyDotnet.sln
 
-    # Stap 4: Build het project
-    - name: Build project
-      run: dotnet build --no-restore --configuration Release
+    # Stap 4: Builden van het project
+    - name: Build solution
+      run: dotnet build OnderhoudsbuddyDotnet.sln --no-restore --configuration Release
 
-    # Stap 5 (optioneel): Voer unit tests uit
-    # Hier kun je unit tests specificeren als je dat nodig hebt in de toekomst
-    # - name: Run Unit Tests
-    #   run: dotnet test --no-build --verbosity normal
+    # Stap 5: Publiceren van de build artefacten
+    - name: Publish
+      run: dotnet publish OnderhoudsbuddyDotnet.sln --configuration Release --output ./publish
 
-    # Stap 6: Publiceer de build artefacten
-    - name: Publish artifacts
-      run: dotnet publish -c Release -o ./publish
+    # Stap 6: Optioneel uploaden van de gepubliceerde artefacten
+    - name: Upload published artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: OnderhoudsbuddyDotnet-Publish
+        path: ./publish
