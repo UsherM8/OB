@@ -2,10 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.Mappers;
-// Voor CarModel
-// Voor CarModelMapper
-
-// Voor ICarContainer
 
 namespace OnderhoudsbuddyWeb.Controllers;
 
@@ -20,59 +16,76 @@ public class CarController : ControllerBase
         _carContainer = carContainer;
     }
 
-    // GET: api/car/{licensePlate}
-    [HttpGet("{licensePlate}")]
-    public async Task<ActionResult<CarModel>> GetCar(string licensePlate)
+    [HttpGet("by-id/{id}")]
+    public async Task<ActionResult<CarModel>> GetCarByIdAsync(int id)
     {
-        var car = await _carContainer.GetCarAsync(licensePlate);
+        var car = await _carContainer.GetCarByIdAsync(id);
         if (car == null)
         {
-            return NotFound(); // Return 404 als de auto niet gevonden is
+            return NotFound();
         }
-
-        return Ok(CarModelMapper.ToModel(car)); // Converteer het response naar CarModel
+        return Ok(CarModelMapper.FullCar(car));
     }
 
-    // POST: api/car
+    [HttpGet("by-license/{licensePlate}")]
+    public async Task<ActionResult<CarModel>> GetCarByLicenseAsync(string licensePlate)
+    {
+        var car = await _carContainer.GetCarByLicenseAsync(licensePlate);
+        if (car == null)
+        {
+            return NotFound();
+        }
+        return Ok(CarModelMapper.FullCar(car));
+    }
+    
+    [HttpGet("details/{id}")]
+    public async Task<ActionResult<CarModel>> GetCarAsync(int id)
+    {
+        var car = await _carContainer.GetCarAsync(id);
+        if (car == null)
+        {
+            return NotFound();
+        }
+        return Ok(CarModelMapper.ToModel(car));
+    }
+    
     [HttpPost]
     public async Task<ActionResult> AddCar([FromBody] CarModel carModel)
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(ModelState); // Return 400 als het model niet valide is
+            return BadRequest(ModelState);
         }
 
-        var car = CarModelMapper.ToEntity(carModel); // Map het model naar de businesslaag
+        var car = CarModelMapper.ToEntity(carModel);
         await _carContainer.AddCarAsync(car);
 
-        return CreatedAtAction(nameof(GetCar), new { licensePlate = car.LicensePlate }, carModel); // Return 201 Created
+        return CreatedAtAction(nameof(GetCarAsync), new { id = car.CarId }, carModel);
     }
-
-    // PUT: api/car/{licensePlate}
+    
     [HttpPut("{licensePlate}")]
     public async Task<ActionResult> UpdateCar(string licensePlate, [FromBody] CarModel carModel)
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(ModelState); // Return 400 bij ongeldige data
+            return BadRequest(ModelState);
         }
 
         if (licensePlate != carModel.LicensePlate)
         {
-            return BadRequest("License plate mismatch."); // Controleer of de license plate klopt
+            return BadRequest("License plate mismatch.");
         }
 
-        var car = CarModelMapper.ToEntity(carModel); // Map naar een business object
+        var car = CarModelMapper.ToEntity(carModel);
         await _carContainer.UpdateCarAsync(car);
 
-        return NoContent(); // Return 204 No Content als de update succesvol is
+        return NoContent();
     }
-
-    // DELETE: api/car/{licensePlate}
-    [HttpDelete("{licensePlate}")]
-    public async Task<ActionResult> DeleteCar(string licensePlate)
+    
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteCar(int id)
     {
-        await _carContainer.DeleteCarAsync(licensePlate);
-        return NoContent(); // Return 204 als delete succesvol is
+        await _carContainer.DeleteCarAsync(id);
+        return NoContent();
     }
 }

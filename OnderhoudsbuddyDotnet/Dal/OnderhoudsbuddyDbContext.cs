@@ -23,14 +23,12 @@ namespace Dal
                 entity.Property(e => e.LicencePlate)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.BrandName)
+                
+                entity.Property(e => e.Mileage)
                     .IsRequired()
-                    .HasMaxLength(100);
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.CarType)
-                    .IsRequired()
-                    .HasMaxLength(100);
+
             });
         }
     }

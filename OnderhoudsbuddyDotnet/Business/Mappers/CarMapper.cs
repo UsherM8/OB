@@ -10,10 +10,8 @@ public static class CarMapper
         {
             CarId = car.CarId,
             LicencePlate = car.LicensePlate,
-            BrandName = car.BrandName,
-            CarType = car.CarType,
             Mileage = car.Mileage,
-            ExpiryDateApk = car.ExpiryDateApk
+ 
         };
     }
     
@@ -23,10 +21,27 @@ public static class CarMapper
         {
             CarId = carDto.CarId,
             LicensePlate = carDto.LicencePlate,
-            BrandName = carDto.BrandName,
-            CarType = carDto.CarType,
             Mileage = carDto.Mileage,
-            ExpiryDateApk = carDto.ExpiryDateApk
         };
     }
+    
+    public static Car MapFromRdw(RdwCarDto rdwCarDto)
+    {
+        return new Car
+        {
+            LicensePlate = rdwCarDto.LicensePlate,
+            Brand = rdwCarDto.Brand,
+            TradeName = rdwCarDto.TradeName,
+            VehicleType = rdwCarDto.VehicleType,
+            PrimaryColor = rdwCarDto.PrimaryColor,
+            EmptyVehicleMass = rdwCarDto.EmptyVehicleMass,
+            FirstAdmissionDate = rdwCarDto.FirstAdmissionDate,
+            MileageJudgment = rdwCarDto.MileageJudgment,
+            RegistrationDate = rdwCarDto.RegistrationDate,
+            ApkExpiryDate = rdwCarDto.ApkExpiryDate,
+        };
+    }
+
+    
+    
 }

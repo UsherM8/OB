@@ -1,6 +1,7 @@
 ﻿using Business.Classes;
 using Business.ContainerInterfaces;
 using Business.Mappers;
+using Domain.Dtos;
 using Domain.RepositoryInterfaces;
 
 namespace Business.Containers;
@@ -13,11 +14,26 @@ public class CarContainer : ICarContainer
     {
         _carRepository = carRepository;
     }
-
-    public async Task<Car?> GetCarAsync(string licensePlate)
+    
+    public async Task<Car?> GetCarByIdAsync(int id)
     {
-        var carDto = await _carRepository.GetCarAsync(licensePlate);
-        return carDto != null ? CarMapper.ToEntity(carDto) : null;
+        var carDto = await _carRepository.GetCarByIdAsync(id);
+        Car car = CarMapper.MapFromRdw(carDto!);
+        return car;
+    }
+
+    public async Task<Car?> GetCarByLicenseAsync(string licensePlate)
+    {
+        var carRdwDto = await _carRepository.GetCarByLicenseAsync(licensePlate);
+        Car car = CarMapper.MapFromRdw(carRdwDto!);
+        return car;
+    }
+
+    public async Task<Car?> GetCarAsync(int id)
+    {
+        var carDto = await _carRepository.GetCarAsync(id);
+        Car car = CarMapper.ToEntity(carDto!);
+        return car;
     }
 
     public async Task AddCarAsync(Car car)
@@ -32,8 +48,8 @@ public class CarContainer : ICarContainer
         await _carRepository.UpdateCarAsync(carDto);
     }
 
-    public async Task DeleteCarAsync(string licensePlate)
+    public async Task DeleteCarAsync(int id)
     {
-        await _carRepository.DeleteCarAsync(licensePlate);
+        await _carRepository.DeleteCarAsync(id);
     }
 }

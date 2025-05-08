@@ -10,10 +10,7 @@ public static class CarModelMapper
         {
             CarId = car.CarId,
             LicensePlate = car.LicensePlate,
-            BrandName = car.BrandName,
-            CarType = car.CarType,
             Mileage = car.Mileage,
-            ExpiryDateApk = car.ExpiryDateApk
         };
     }
 
@@ -23,10 +20,24 @@ public static class CarModelMapper
         {
             CarId = carModel.CarId,
             LicensePlate = carModel.LicensePlate,
-            BrandName = carModel.BrandName,
-            CarType = carModel.CarType,
             Mileage = carModel.Mileage,
-            ExpiryDateApk = carModel.ExpiryDateApk
+        };
+    }
+    
+    public static CarModel FullCar(Car carModel)
+    {
+        return new CarModel
+        {
+            LicensePlate = carModel.LicensePlate,
+            Brand = carModel.Brand,
+            TradeName = carModel.TradeName,
+            VehicleType = carModel.VehicleType,
+            PrimaryColor = carModel.PrimaryColor,
+            EmptyVehicleMass = carModel.EmptyVehicleMass,
+            FirstAdmissionDate = carModel.FirstAdmissionDate,
+            MileageJudgment = carModel.MileageJudgment,
+            RegistrationDate = carModel.RegistrationDate,
+            ApkExpiryDate = carModel.ApkExpiryDate,
         };
     }
 }

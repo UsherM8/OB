@@ -1,54 +1,59 @@
-﻿
+﻿using Dal.Services;
+using Domain.Dtos;
+using Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dal.Repositories;
 
-public class CarRepository
+public class CarRepository : ICar
 {
-    private readonly DbContext _context;
+    private readonly OnderhoudsbuddyDbContext _context;
+    private readonly RdwApiClient _rdwApiClient;
 
-    public CarRepository(DbContext context)
+    public CarRepository(OnderhoudsbuddyDbContext context, RdwApiClient rdwApiClient)
     {
         _context = context;
+        _rdwApiClient = rdwApiClient;
     }
 
-    public async Task<IEnumerable<CarDto>> GetAllAsync()
+    public async Task<RdwCarDto?> GetCarByIdAsync(int id)
+    {   
+        CarDto carDto = await _context.Cars.FindAsync(id);
+        RdwCarDto rdwCarDto = await _rdwApiClient.GetCarAsync(carDto.LicencePlate); 
+        return rdwCarDto;
+    }
+    
+    public async Task<RdwCarDto?> GetCarByLicenseAsync(string licensePlate)
     {
-        return await _context.Set<CarDto>().ToListAsync();
+        RdwCarDto rdwCarDto = await _rdwApiClient.GetCarAsync(licensePlate); 
+        return rdwCarDto;
     }
 
-    public async Task<CarDto?> GetByIdAsync(int id)
+    public async Task<CarDto?> GetCarAsync(int id)
     {
-        return await _context.Set<CarDto>().FindAsync(id);
+        CarDto carDto = await _context.Cars.FindAsync(id);
+        return carDto;
     }
 
-    public async Task AddAsync(CarDto carDto)
+    public async Task AddCarAsync(CarDto carDto)
     {
-        await _context.Set<CarDto>().AddAsync(carDto);
+        await _context.Cars.AddAsync(carDto);
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(CarDto carDto)
+    public async Task UpdateCarAsync(CarDto carDto)
     {
-        _context.Set<CarDto>().Update(carDto);
+        _context.Cars.Update(carDto);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteCarAsync(int id)
     {
-        var carDto = await GetByIdAsync(id);
+        var carDto = await GetCarAsync(id);
         if (carDto != null)
         {
-            _context.Set<CarDto>().Remove(carDto);
+            _context.Cars.Remove(carDto);
             await _context.SaveChangesAsync();
         }
     }
-}
-
-public class CarDto
-{
-    public int Id { get; set; }
-    public string Make { get; set; }
-    public string Model { get; set; }
-    public int Year { get; set; }
 }
