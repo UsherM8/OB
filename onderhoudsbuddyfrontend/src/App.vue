@@ -25,6 +25,18 @@
               <span>Registreren</span>
             </router-link>
           </li>
+          <li>
+            <router-link to="/CarRegister" class="nav-link">
+              <i class="icon">✏️</i>
+              <span>Auto regristreren</span>
+            </router-link>
+          </li>
+          <li>
+            <router-link to="/SearchCar" class="nav-link">
+              <i class="icon">✏️</i>
+              <span>Auto zoeken</span>
+            </router-link>
+          </li>
         </ul>
       </nav>
       <div class="sidebar-footer">
