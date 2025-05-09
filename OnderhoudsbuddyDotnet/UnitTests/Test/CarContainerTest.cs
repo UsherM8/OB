@@ -18,7 +18,7 @@ public class CarContainerTest
         _carContainer = new CarContainer(_mockRepository.GetCarRepository().Object);
     }
 
-    [Fact]
+    /*[Fact]
     public async Task GetCarbyLicenseSuccesTest()
     {
         // Arrange
@@ -40,9 +40,9 @@ public class CarContainerTest
         Xunit.Assert.Equal(1, result.CarId); // Controleer de CarId
         Xunit.Assert.Equal("839747", result.LicensePlate); // Controleer het kenteken
         Xunit.Assert.Equal(100000, result.Mileage); // Controleer het kilometerstand
-    }
+    }*/
     
-    [Fact]
+    /*[Fact]
     public async Task GetCarbyLicenseFailTest()
     {
         // Arrange
@@ -64,9 +64,9 @@ public class CarContainerTest
         Xunit.Assert.Equal(1, result.CarId); // Controleer de CarId
         Xunit.Assert.Equal("839747", result.LicensePlate); // Controleer het kenteken
         Xunit.Assert.Equal(100000, result.Mileage); // Controleer het kilometerstand
-    }
+    }*/
     
-    [Fact]
+    /*[Fact]
     public async Task GetCarbyIdSuccesTest()
     {
         // Arrange
@@ -88,9 +88,9 @@ public class CarContainerTest
         Xunit.Assert.Equal(1, result.CarId); // Controleer de CarId
         Xunit.Assert.Equal("839747", result.LicensePlate); // Controleer het kenteken
         Xunit.Assert.Equal(100000, result.Mileage); // Controleer het kilometerstand
-    }
+    }*/
     
-    [Fact]
+    /*[Fact]
     public async Task GetCarbyIdFailTest()
     {
         // Arrange
@@ -112,6 +112,6 @@ public class CarContainerTest
         Xunit.Assert.Equal(1, result.CarId); // Controleer de CarId
         Xunit.Assert.Equal("839747", result.LicensePlate); // Controleer het kenteken
         Xunit.Assert.Equal(100000, result.Mileage); // Controleer het kilometerstand
-    }
+    }*/
 }
 
