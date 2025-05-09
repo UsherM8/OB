@@ -24,6 +24,18 @@ builder.Services.AddHttpClient<RdwApiClient>(client =>
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()  // In productie beperk je dit tot specifieke origins
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+// En in de app configuratie, voor de endpoints/controllers
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -35,7 +47,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
-
+app.UseCors();
 app.MapControllers();
-
 app.Run();

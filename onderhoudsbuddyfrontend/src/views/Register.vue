@@ -1,13 +1,12 @@
 <template>
   <div class="register-container">
     <div class="register-card">
-      <h2 class="title">Word lid</h2>
+      <h2 class="title">Meld aan</h2>
 
       <form @submit.prevent="handleRegister" class="register-form">
         <div class="form-group">
           <label for="name">Volledige naam</label>
           <div class="input-container">
-            <i class="icon">👤</i>
             <input
                 id="name"
                 type="text"
@@ -24,7 +23,6 @@
         <div class="form-group">
           <label for="email">E-mail</label>
           <div class="input-container">
-            <i class="icon">✉️</i>
             <input
                 id="email"
                 type="email"
@@ -41,7 +39,6 @@
         <div class="form-group">
           <label for="password">Wachtwoord</label>
           <div class="input-container">
-            <i class="icon">🔒</i>
             <input
                 id="password"
                 :type="showPassword ? 'text' : 'password'"
@@ -52,13 +49,13 @@
                 @focus="activeInput = 'password'"
                 @blur="activeInput = null"
             />
-            <button
-                type="button"
-                class="toggle-password"
-                @click="showPassword = !showPassword"
-            >
-              {{ showPassword ? '🙈' : '👁️' }}
-            </button>
+<!--            <button-->
+<!--                type="button"-->
+<!--                class="toggle-password"-->
+<!--                @click="showPassword = !showPassword"-->
+<!--            >-->
+<!--              {{ showPassword ? '' : '' }}-->
+<!--            </button>-->
           </div>
         </div>
 

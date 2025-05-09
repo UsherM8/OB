@@ -9,31 +9,26 @@
         <ul>
           <li>
             <router-link to="/home" class="nav-link">
-              <i class="icon">🏠</i>
               <span>Home</span>
             </router-link>
           </li>
           <li>
             <router-link to="/login" class="nav-link">
-              <i class="icon">🔑</i>
               <span>Login</span>
             </router-link>
           </li>
           <li>
             <router-link to="/register" class="nav-link">
-              <i class="icon">✏️</i>
               <span>Registreren</span>
             </router-link>
           </li>
           <li>
             <router-link to="/CarRegister" class="nav-link">
-              <i class="icon">✏️</i>
               <span>Auto regristreren</span>
             </router-link>
           </li>
           <li>
             <router-link to="/SearchCar" class="nav-link">
-              <i class="icon">✏️</i>
               <span>Auto zoeken</span>
             </router-link>
           </li>
