@@ -20,9 +20,6 @@ permissions:
 jobs:
   CodeScan:
     runs-on: ubuntu-latest
-    env:
-      JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
-      PATH: ${{ env.JAVA_HOME_17_X64 }}/bin:${{ env.PATH }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -40,6 +37,11 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
+      - name: Zet JAVA_HOME en update PATH
+        run: |
+          echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
+          echo "PATH=$JAVA_HOME_17_X64/bin:$PATH" >> $GITHUB_ENV
 
       - name: Run Analysis
         uses: codescan-io/codescan-scanner-action@5b2e8c5683ef6a5adc8fa3b7950bb07debccce12
