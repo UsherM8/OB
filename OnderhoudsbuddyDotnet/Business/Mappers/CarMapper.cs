@@ -9,36 +9,37 @@ public static class CarMapper
         return new CarDto
         {
             CarId = car.CarId,
-            LicencePlate = car.LicensePlate,
+            LicensePlate = car.LicensePlate,
             Mileage = car.Mileage,
- 
         };
     }
     
     public static Car ToEntity(CarDto carDto)
     {
-        return new Car
+        return new Car()
         {
             CarId = carDto.CarId,
-            LicensePlate = carDto.LicencePlate,
+            LicensePlate = carDto.LicensePlate,
             Mileage = carDto.Mileage,
         };
     }
     
-    public static Car MapFromRdw(RdwCarDto rdwCarDto)
+    public static Car MapFromRdw(CarDto CarDto)
     {
         return new Car
         {
-            LicensePlate = rdwCarDto.LicensePlate,
-            Brand = rdwCarDto.Brand,
-            TradeName = rdwCarDto.TradeName,
-            VehicleType = rdwCarDto.VehicleType,
-            PrimaryColor = rdwCarDto.PrimaryColor,
-            EmptyVehicleMass = rdwCarDto.EmptyVehicleMass,
-            FirstAdmissionDate = rdwCarDto.FirstAdmissionDate,
-            MileageJudgment = rdwCarDto.MileageJudgment,
-            RegistrationDate = rdwCarDto.RegistrationDate,
-            ApkExpiryDate = rdwCarDto.ApkExpiryDate,
+            CarId = CarDto.CarId,
+            Mileage = CarDto.Mileage,
+            LicensePlate = CarDto.LicensePlate,
+            Brand = CarDto.Brand,
+            TradeName = CarDto.TradeName,
+            VehicleType = CarDto.VehicleType,
+            PrimaryColor = CarDto.PrimaryColor,
+            EmptyVehicleMass = CarDto.EmptyVehicleMass,
+            FirstAdmissionDate = CarDto.FirstAdmissionDate,
+            MileageJudgment = CarDto.MileageJudgment,
+            RegistrationDate = CarDto.RegistrationDate,
+            ApkExpiryDate = CarDto.ApkExpiryDate,
         };
     }
 

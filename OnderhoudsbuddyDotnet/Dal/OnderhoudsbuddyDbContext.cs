@@ -20,15 +20,24 @@ namespace Dal
             {
                 entity.HasKey(e => e.CarId);
 
-                entity.Property(e => e.LicencePlate)
+                entity.Property(e => e.LicensePlate)
                     .IsRequired()
                     .HasMaxLength(50);
                 
                 entity.Property(e => e.Mileage)
                     .IsRequired()
                     .HasMaxLength(50);
-
-
+                
+                // Uitsluiten van overige eigenschappen
+                entity.Ignore(e => e.Brand);
+                entity.Ignore(e => e.TradeName);
+                entity.Ignore(e => e.VehicleType);
+                entity.Ignore(e => e.PrimaryColor);
+                entity.Ignore(e => e.ApkExpiryDate);
+                entity.Ignore(e => e.EmptyVehicleMass);
+                entity.Ignore(e => e.RegistrationDate);
+                entity.Ignore(e => e.FirstAdmissionDate);
+                entity.Ignore(e => e.MileageJudgment);
             });
         }
     }

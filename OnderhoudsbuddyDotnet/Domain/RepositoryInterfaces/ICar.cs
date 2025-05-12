@@ -4,8 +4,8 @@ namespace Domain.RepositoryInterfaces;
 
 public interface ICar
 {
-    Task<RdwCarDto?> GetCarByIdAsync(int id);
-    Task<RdwCarDto?> GetCarByLicenseAsync(string licensePlate);
+    Task<CarDto?> GetCarByIdAsync(int id);
+    Task<CarDto?> GetCarByLicenseAsync(string licensePlate);
     Task<CarDto?> GetCarAsync(int id);
     Task AddCarAsync(CarDto carDto);
     Task UpdateCarAsync(CarDto carDto);

@@ -1,0 +1,77 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\S3\\Individueel\\usherindividueels3\\OB\\OnderhoudsbuddyDotnet\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B6F3633C-4BBD-467A-A2A7-FA68A1CA809F}|UnitTests\\UnitTests.csproj|c:\\s3\\individueel\\usherindividueels3\\ob\\onderhoudsbuddydotnet\\unittests\\test\\carcontainertest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6F3633C-4BBD-467A-A2A7-FA68A1CA809F}|UnitTests\\UnitTests.csproj|solutionrelative:unittests\\test\\carcontainertest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6F3633C-4BBD-467A-A2A7-FA68A1CA809F}|UnitTests\\UnitTests.csproj|c:\\s3\\individueel\\usherindividueels3\\ob\\onderhoudsbuddydotnet\\unittests\\mockrepository\\carmockrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6F3633C-4BBD-467A-A2A7-FA68A1CA809F}|UnitTests\\UnitTests.csproj|solutionrelative:unittests\\mockrepository\\carmockrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6F3633C-4BBD-467A-A2A7-FA68A1CA809F}|UnitTests\\UnitTests.csproj|c:\\s3\\individueel\\usherindividueels3\\ob\\onderhoudsbuddydotnet\\unittests\\unittests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{B6F3633C-4BBD-467A-A2A7-FA68A1CA809F}|UnitTests\\UnitTests.csproj|solutionrelative:unittests\\unittests.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CarContainerTest.cs",
+              "DocumentMoniker": "C:\\S3\\Individueel\\usherindividueels3\\OB\\OnderhoudsbuddyDotnet\\UnitTests\\Test\\CarContainerTest.cs",
+              "RelativeDocumentMoniker": "UnitTests\\Test\\CarContainerTest.cs",
+              "ToolTip": "C:\\S3\\Individueel\\usherindividueels3\\OB\\OnderhoudsbuddyDotnet\\UnitTests\\Test\\CarContainerTest.cs",
+              "RelativeToolTip": "UnitTests\\Test\\CarContainerTest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADsAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T07:14:58.911Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CarMockRepository.cs",
+              "DocumentMoniker": "C:\\S3\\Individueel\\usherindividueels3\\OB\\OnderhoudsbuddyDotnet\\UnitTests\\MockRepository\\CarMockRepository.cs",
+              "RelativeDocumentMoniker": "UnitTests\\MockRepository\\CarMockRepository.cs",
+              "ToolTip": "C:\\S3\\Individueel\\usherindividueels3\\OB\\OnderhoudsbuddyDotnet\\UnitTests\\MockRepository\\CarMockRepository.cs",
+              "RelativeToolTip": "UnitTests\\MockRepository\\CarMockRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T07:14:54.581Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UnitTests.csproj",
+              "DocumentMoniker": "C:\\S3\\Individueel\\usherindividueels3\\OB\\OnderhoudsbuddyDotnet\\UnitTests\\UnitTests.csproj",
+              "RelativeDocumentMoniker": "UnitTests\\UnitTests.csproj",
+              "ToolTip": "C:\\S3\\Individueel\\usherindividueels3\\OB\\OnderhoudsbuddyDotnet\\UnitTests\\UnitTests.csproj",
+              "RelativeToolTip": "UnitTests\\UnitTests.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-05-12T07:14:49.218Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

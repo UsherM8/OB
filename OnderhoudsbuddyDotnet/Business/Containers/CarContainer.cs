@@ -25,6 +25,10 @@ public class CarContainer : ICarContainer
     public async Task<Car?> GetCarByLicenseAsync(string licensePlate)
     {
         var carRdwDto = await _carRepository.GetCarByLicenseAsync(licensePlate);
+        if (carRdwDto == null)
+        {
+            return new Car();
+        }
         Car car = CarMapper.MapFromRdw(carRdwDto!);
         return car;
     }

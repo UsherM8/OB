@@ -12,11 +12,11 @@ public class RdwApiClient
         _httpClient = httpClient;
     }
 
-    public async Task<RdwCarDto> GetCarAsync(string licensePlate)
+    public async Task<CarDto> GetCarAsync(string licensePlate)
     {
         var response = await _httpClient.GetAsync($"m9d7-ebf2.json?kenteken={licensePlate}");
         response.EnsureSuccessStatusCode();
-        var carDtos = await response.Content.ReadFromJsonAsync<List<RdwCarDto>>();
+        var carDtos = await response.Content.ReadFromJsonAsync<List<CarDto>>();
         if (carDtos == null || carDtos.Count == 0)
         {
             throw new Exception("No car data found for the given license plate.");

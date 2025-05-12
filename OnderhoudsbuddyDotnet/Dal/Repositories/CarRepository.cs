@@ -16,17 +16,17 @@ public class CarRepository : ICar
         _rdwApiClient = rdwApiClient;
     }
 
-    public async Task<RdwCarDto?> GetCarByIdAsync(int id)
+    public async Task<CarDto?> GetCarByIdAsync(int id)
     {   
         CarDto carDto = await _context.Cars.FindAsync(id);
-        RdwCarDto rdwCarDto = await _rdwApiClient.GetCarAsync(carDto.LicencePlate); 
-        return rdwCarDto;
+        CarDto carDto2 = await _rdwApiClient.GetCarAsync(carDto.LicensePlate); 
+        return carDto2;
     }
     
-    public async Task<RdwCarDto?> GetCarByLicenseAsync(string licensePlate)
+    public async Task<CarDto?> GetCarByLicenseAsync(string licensePlate)
     {
-        RdwCarDto rdwCarDto = await _rdwApiClient.GetCarAsync(licensePlate); 
-        return rdwCarDto;
+        CarDto carDto = await _rdwApiClient.GetCarAsync(licensePlate); 
+        return carDto;
     }
 
     public async Task<CarDto?> GetCarAsync(int id)
