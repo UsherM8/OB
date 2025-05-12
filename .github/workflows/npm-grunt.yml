@@ -24,6 +24,6 @@ jobs:
 
       - name: Build in onderhoudsbuddyfrontend
         run: |
-          cd OB/onderhoudsbuddyfrontend
+          cd onderhoudsbuddyfrontend
           npm install
           grunt
