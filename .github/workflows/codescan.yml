@@ -38,19 +38,31 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Zet JAVA_HOME en update PATH
-        run: |
-          echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV
-          echo "PATH=$JAVA_HOME_17_X64/bin:$PATH" >> $GITHUB_ENV
+      - name: Controleer Java versie
+        run: java -version
 
-      - name: Run Analysis
-        uses: codescan-io/codescan-scanner-action@5b2e8c5683ef6a5adc8fa3b7950bb07debccce12
-        with:
-          login: ${{ secrets.CODESCAN_AUTH_TOKEN }}
-          organization: ${{ secrets.CODESCAN_ORGANIZATION_KEY }}
-          projectKey: ${{ secrets.CODESCAN_PROJECT_KEY }}
+      - name: Download en voer Sonar Scanner uit
+        run: |
+          wget -O sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+          unzip sonar-scanner.zip
+          ./sonar-scanner-4.8.0.2856-linux/bin/sonar-scanner \
+            -Dsonar.login=${{ secrets.CODESCAN_AUTH_TOKEN }} \
+            -Dsonar.organization=${{ secrets.CODESCAN_ORGANIZATION_KEY }} \
+            -Dsonar.projectKey=${{ secrets.CODESCAN_PROJECT_KEY }} \
+            -Dsonar.host.url=https://app.codescan.io
+
+      - name: Zoek en upload SARIF
+        run: |
+          if [ -f "codescan.sarif" ]; then
+            echo "SARIF gevonden."
+          else
+            echo "Geen codescan.sarif bestand gevonden."
+            exit 0
+          fi
+        continue-on-error: true
 
       - name: Upload SARIF file
+        if: success()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: codescan.sarif
