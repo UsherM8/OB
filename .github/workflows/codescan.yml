@@ -1,11 +1,9 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+# This workflow gebruikt acties die niet zijn gecertificeerd door GitHub.
+# Ze worden geleverd door derden en vallen onder afzonderlijke voorwaarden, privacybeleid en ondersteuning.
 
-# This workflow requires that you have an existing account with codescan.io
-# For more information about configuring your workflow,
-# read our documentation at https://github.com/codescan-io/codescan-scanner-action
+# Voor deze workflow is een bestaand account bij codescan.io vereist.
+# Meer informatie: https://github.com/codescan-io/codescan-scanner-action
+
 name: CodeScan
 
 on:
@@ -22,6 +20,9 @@ permissions:
 jobs:
   CodeScan:
     runs-on: ubuntu-latest
+    env:
+      JAVA_HOME: ${{ env.JAVA_HOME_17_X64 }}
+      PATH: ${{ env.JAVA_HOME_17_X64 }}/bin:${{ env.PATH }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -39,9 +40,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - name: Set JAVA_HOME environment variable
-        run: echo "JAVA_HOME=${JAVA_HOME_17_X64}" >> $GITHUB_ENV
 
       - name: Run Analysis
         uses: codescan-io/codescan-scanner-action@5b2e8c5683ef6a5adc8fa3b7950bb07debccce12
