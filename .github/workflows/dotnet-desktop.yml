@@ -74,6 +74,11 @@ jobs:
       working-directory: OnderhoudsbuddyDotnet
       run: dotnet build OnderhoudsbuddyDotnet.sln --no-restore --configuration Release
 
+    # Stap 6: Voer unittests uit
+    - name: Execute unit tests
+      working-directory: OnderhoudsbuddyDotnet
+      run: dotnet test OnderhoudsbuddyDotnet.sln --no-restore --configuration Release
+
   publish:
     runs-on: ubuntu-latest
     needs: build   # Wacht tot de 'build' job is voltooid
