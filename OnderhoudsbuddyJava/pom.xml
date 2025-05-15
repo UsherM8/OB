@@ -97,7 +97,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/UsherM8/OB</url>
+            <url>https://maven.pkg.github.com/GEBRUIKERSNAAM/OB</url>
         </repository>
     </distributionManagement>
 </project>
