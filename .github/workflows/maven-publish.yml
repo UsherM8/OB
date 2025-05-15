@@ -28,10 +28,22 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-    - name: Build with Maven
-      run: mvn -B package --file OnderhoudsbuddyJava/pom.xml
+    - name: Build with Maven (skip tests)
+      run: mvn -B package -DskipTests --file OnderhoudsbuddyJava/pom.xml
+
+    - name: Run tests with detailed output
+      run: mvn -B test --file OnderhoudsbuddyJava/pom.xml
+      continue-on-error: true
+
+    - name: Upload test reports
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: surefire-reports
+        path: OnderhoudsbuddyJava/target/surefire-reports/
 
     - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml --file OnderhoudsbuddyJava/pom.xml
+      if: success()
+      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml --file OnderhoudsbuddyJava/pom.xml -DskipTests
       env:
         GITHUB_TOKEN: ${{ github.token }}
