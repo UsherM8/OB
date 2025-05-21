@@ -111,7 +111,6 @@ const handleRegister = async () => {
 </script>
 
 <style scoped>
-/* Aangepaste container die de volledige ruimte binnen de view-component benut */
 .register-container {
   display: flex;
   justify-content: center;
@@ -129,9 +128,9 @@ const handleRegister = async () => {
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
   padding: 40px;
   width: 100%;
-  max-width: 550px; /* Vergroot de maximale breedte */
+  max-width: 550px;
   min-width: 320px;
-  min-height: 500px; /* Minimale hoogte om meer ruimte te gebruiken */
+  min-height: 500px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -145,14 +144,14 @@ const handleRegister = async () => {
 
 .title {
   color: #333;
-  margin-bottom: 40px; /* Meer ruimte */
+  margin-bottom: 40px;
   text-align: center;
   font-weight: 600;
-  font-size: 2rem; /* Grotere tekst */
+  font-size: 2rem;
 }
 
 .form-group {
-  margin-bottom: 30px; /* Meer ruimte tussen formuliergroepen */
+  margin-bottom: 30px;
 }
 
 label {
@@ -160,7 +159,7 @@ label {
   margin-bottom: 10px;
   font-weight: 500;
   color: #555;
-  font-size: 1rem; /* Iets grotere labels */
+  font-size: 1rem;
 }
 
 .input-container {
@@ -173,15 +172,15 @@ label {
   position: absolute;
   left: 15px;
   color: #aaa;
-  font-size: 1.2rem; /* Iets grotere iconen */
+  font-size: 1.2rem;
 }
 
 input {
   width: 100%;
-  padding: 15px 15px 15px 45px; /* Grotere padding */
+  padding: 15px 15px 15px 45px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 1.1rem; /* Grotere tekst in invoervelden */
+  font-size: 1.1rem;
   transition: all 0.3s;
 }
 
@@ -208,17 +207,17 @@ input:focus {
 
 .register-button {
   width: 100%;
-  padding: 15px; /* Grotere knop */
+  padding: 15px;
   background: linear-gradient(to right, #48bb78, #38a169);
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 1.1rem; /* Grotere tekst */
+  font-size: 1.1rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s;
   position: relative;
-  margin-top: 20px; /* Meer ruimte boven de knop */
+  margin-top: 20px;
 }
 
 .register-button:hover:not(:disabled) {
@@ -259,8 +258,8 @@ input:focus {
 
 .login-link {
   text-align: center;
-  margin-top: 30px; /* Meer ruimte */
-  font-size: 1rem; /* Grotere tekst */
+  margin-top: 30px;
+  font-size: 1rem;
   color: #555;
 }
 
@@ -276,7 +275,6 @@ input:focus {
   text-decoration: underline;
 }
 
-/* Media queries voor responsive design */
 @media (max-height: 700px) {
   .register-card {
     min-height: auto;

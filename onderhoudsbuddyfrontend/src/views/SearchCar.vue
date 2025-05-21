@@ -1,16 +1,14 @@
 <script setup>
 import { ref } from 'vue';
-import api from './api.js'; // Pas het pad aan naar waar je api.js echt staat
+import api from './api.js';
 
-// Reactieve state
+
 const licensePlate = ref('');
 const car = ref(null);
 const loading = ref(false);
 const error = ref(null);
 const searched = ref(false);
 
-// Functie om auto op te zoeken op kenteken
-// Voeg deze code toe aan je searchCar functie
 const searchCar = async () => {
   console.log('Zoekfunctie aangeroepen');
 
@@ -34,13 +32,11 @@ const searchCar = async () => {
     car.value = response.data;
   } catch (err) {
     console.error('Volledige foutgegevens:', err);
-    // Rest van je foutafhandeling
   } finally {
     loading.value = false;
   }
 };
 
-// Functie om datums netjes te formatteren
 const formatDate = (dateString) => {
   if (!dateString) return '-';
   try {
@@ -51,7 +47,7 @@ const formatDate = (dateString) => {
       year: 'numeric'
     }).format(date);
   } catch {
-    return dateString; // Als de datum niet kan worden geparsed, toon de originele string
+    return dateString;
   }
 };
 </script>
@@ -65,7 +61,7 @@ const formatDate = (dateString) => {
         <input
             v-model="licensePlate"
             type="text"
-            placeholder="Voer kenteken in (bijv. 83ZSJT)"
+            placeholder="Voer kenteken in"
             @keyup.enter="searchCar"
         />
         <button @click="searchCar" :disabled="loading">

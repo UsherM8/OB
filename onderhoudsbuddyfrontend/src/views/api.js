@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-// Basis configuratie voor alle API verzoeken
+
 const apiClient = axios.create({
-    baseURL: 'https://localhost:44393', // Pas dit aan naar de URL van je .NET backend
+    baseURL: 'https://localhost:44393',
     headers: {
         'Content-Type': 'application/json',
     },
-    timeout: 10000, // 10 seconden timeout
+    timeout: 10000,
 
 });
 
@@ -35,4 +35,5 @@ export default {
     deleteCar(id) {
         return apiClient.delete(`/api/Car/${id}`);
     }
+    // user endpoints
 };

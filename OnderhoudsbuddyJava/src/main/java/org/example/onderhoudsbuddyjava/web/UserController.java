@@ -37,19 +37,42 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@RequestBody CreateUserRequest request) {
-        UserDto dto = new UserDto(null, request.getFirstName(), request.getLastName(), request.getBirthDate(), request.getEmail(), request.getType());
+        UserDto dto = new UserDto(null, request.getFirstName(), request.getLastName(), request.getPassword(), request.getBirthDate(), request.getEmail(), request.getType());
         UserDto created = userService.createUser(dto,request.getPassword());
         return new ResponseEntity<>(mapToResponse(created), HttpStatus.CREATED);
     }
 
-    private UserResponse mapToResponse(UserDto dto) {
-        return new UserResponse(
-                dto.getUserId(),
-                dto.getFirstName(),
-                dto.getLastName(),
-                dto.getBirthDate(),
-                dto.getEmail(),
-                dto.getType()
-        );
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponse> updateUser(
+        @PathVariable Integer id,
+        @RequestBody CreateUserRequest request
+    ) {
+        UserDto dto = new UserDto(id, request.getFirstName(), request.getLastName(), request.getPassword(), request.getBirthDate(), request.getEmail(), request.getType());
+        UserDto updateUser = userService.updateUser(dto);
+        return new ResponseEntity<>(mapToResponse(updateUser), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id)
+    {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
+private UserResponse mapToResponse(UserDto dto) {
+    if (dto == null) {
+        throw new IllegalArgumentException("Gebruikersgegevens zijn niet beschikbaar!");
+    }
+    return new UserResponse(
+        dto.getUserId(),
+        dto.getFirstName(),
+        dto.getLastName(),
+        dto.getPassword(),
+        dto.getBirthDate(),
+        dto.getEmail(),
+        dto.getType()
+    );
+}
 }
