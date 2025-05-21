@@ -27,10 +27,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-        .requestMatchers("/api/admin/**").hasRole("ADMIN") // alleen toegankelijk voor admins
-        .requestMatchers("/api/user/**").hasRole("USER")   // alleen toegankelijk voor gebruikers
-        .anyRequest().authenticated()                      // alle andere endpoints vereisen authenticatie
-);
+                    .anyRequest().permitAll() // Sta alle verzoeken toe
+            );
 
     return http.build();
 }

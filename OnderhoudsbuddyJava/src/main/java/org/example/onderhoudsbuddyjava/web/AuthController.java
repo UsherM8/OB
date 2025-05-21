@@ -46,7 +46,7 @@ public class AuthController {
     @PostMapping("/logout")
     public Map<String, String> logout() {
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Uitgelogd. Zorg dat het token clientside wordt vernietigd.");
+        response.put("message", "Uitgelogd");
         return response;
     }
 }
