@@ -10,6 +10,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -26,12 +31,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Cors configuratie toevoegen
                 .authorizeHttpRequests(authorize -> authorize
                     .anyRequest().permitAll() // Sta alle verzoeken toe
             );
 
-    return http.build();
-}
+        return http.build();
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -46,5 +52,18 @@ public class SecurityConfig {
     @Bean
     public JwtAuthFilter jwtAuthFilter() {
         return new JwtAuthFilter(jwtUtil, userDetailsService);
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Voeg toegestane origins toe
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Toegestane methodes
+        configuration.setAllowedHeaders(List.of("*")); // Sta alle headers toe
+        configuration.setAllowCredentials(true); // Sta cookies en credentials toe
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Pas configuratie toe op alle URL's
+        return source;
     }
 }

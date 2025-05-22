@@ -1,6 +1,23 @@
 import axios from 'axios';
 
+axios.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem('token');
+      router.push('/login');
+    }
+    return Promise.reject(error);
+  }
+);
 const apiClientDotnet = axios.create({
     baseURL: 'https://localhost:44393',
     headers: {
@@ -11,7 +28,7 @@ const apiClientDotnet = axios.create({
 });
 
 const apiClientJava = axios.create({
-    baseURL: 'https://localhost:8080/api',
+    baseURL: 'http://localhost:8080',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -43,37 +60,37 @@ export default {
 
     deleteCar(id) {
         return apiClientDotnet.delete(`/api/Car/${id}`);
-    }
+    },
     // User endpoints
     getAllUsers() {
-        return apiClientJava.get('/users');
+        return apiClientJava.get('/api/users');
     },
 
     getUserById(id) {
-        return apiClientJava.get(`/users/${id}`);
+        return apiClientJava.get(`/api/users/${id}`);
     },
 
     createUser(userData) {
-        return apiClientJava.post('/users', userData);
+        return apiClientJava.post('/api/users', userData);
     },
 
     updateUser(id, userData) {
-        return apiClientJava.put(`/users/${id}`, userData);
+        return apiClientJava.put(`/api/users/${id}`, userData);
     },
 
     deleteUser(id) {
-        return apiClientJava.delete(`/users/${id}`);
+        return apiClientJava.delete(`/api/users/${id}`);
     },
 
     // Authentication endpoints
     login(email, password) {
-        return apiClientJava.post('/auth/login', { email, password });
+        return apiClientJava.post('/api/auth/login', { email, password });
     },
 
     logout() {
-        return apiClientJava.post('/auth/logout');
+        return apiClientJava.post('/api/auth/logout');
     },
-    
+
     setAuthToken(token) {
         apiClientJava.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     },

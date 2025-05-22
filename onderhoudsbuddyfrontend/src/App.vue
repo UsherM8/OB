@@ -1,3 +1,38 @@
+<script setup>
+import { ref, onMounted, watch } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const isLoggedIn = ref(false);
+
+// Controleer inlogstatus bij het laden van de component
+onMounted(() => {
+  checkLoginStatus();
+});
+
+// Update de inlogstatus wanneer nodig
+function checkLoginStatus() {
+  // Controleer op JWT token
+  const token = localStorage.getItem('token'); // of waar je de token opslaat
+  isLoggedIn.value = !!token;
+}
+
+// Uitlogfunctie
+function logout() {
+  // Verwijder token
+  localStorage.removeItem('token');
+  // Eventueel andere opgeslagen gegevens verwijderen
+  isLoggedIn.value = false;
+  // Navigeer naar de loginpagina
+  router.push('/login');
+}
+
+// Luister naar veranderingen in de route om de inlogstatus bij te werken
+watch(() => router.currentRoute.value, () => {
+  checkLoginStatus();
+}, { deep: true });
+</script>
+
 <template>
   <div class="layout">
     <!-- Sidebar -->
@@ -12,25 +47,33 @@
               <span>Home</span>
             </router-link>
           </li>
-          <li>
+          <!-- Toon alleen Login en Registreren als gebruiker NIET is ingelogd -->
+          <li v-if="!isLoggedIn">
             <router-link to="/login" class="nav-link">
               <span>Login</span>
             </router-link>
           </li>
-          <li>
+          <li v-if="!isLoggedIn">
             <router-link to="/register" class="nav-link">
               <span>Registreren</span>
             </router-link>
           </li>
-          <li>
+          <!-- Toon deze opties alleen als gebruiker WEL is ingelogd -->
+          <li v-if="isLoggedIn">
             <router-link to="/CarRegister" class="nav-link">
               <span>Auto regristreren</span>
             </router-link>
           </li>
-          <li>
+          <li v-if="isLoggedIn">
             <router-link to="/SearchCar" class="nav-link">
               <span>Auto zoeken</span>
             </router-link>
+          </li>
+          <!-- Voeg een uitlogknop toe als gebruiker is ingelogd -->
+          <li v-if="isLoggedIn">
+            <a @click="logout" class="nav-link logout-link">
+              <span>Uitloggen</span>
+            </a>
           </li>
         </ul>
       </nav>
@@ -198,6 +241,15 @@ body {
 }
 </style>
 
-<script setup>
-/* Eventueel toekomstige script-logica */
-</script>
+<style>
+/* Bestaande stijlen behouden */
+
+/* Extra stijl voor uitloggen link om te laten zien dat het klikbaar is */
+.logout-link {
+  cursor: pointer;
+}
+
+.logout-link:hover {
+  background-color: rgba(255, 0, 0, 0.2); /* Subtiele rode hover voor uitloggen */
+}
+</style>

@@ -19,4 +19,23 @@ const router = createRouter({
     routes,
 })
 
+// router.js
+router.beforeEach((to, from, next) => {
+    // Haal de token direct uit localStorage (voor verse data)
+    const token = localStorage.getItem('token');
+    const isLoggedIn = !!token;
+
+    console.log('Navigatie naar:', to.path);
+    console.log('Ingelogd:', isLoggedIn);
+    console.log('Token:', token);
+
+    if ((to.path === '/login' || to.path === '/register' || to.path === '/') && isLoggedIn) {
+        console.log('Omleiding naar home');
+        next('/home');
+    } else {
+        console.log('Normale navigatie');
+        next();
+    }
+});
+
 export default router

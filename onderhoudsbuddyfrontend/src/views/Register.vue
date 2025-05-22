@@ -5,16 +5,47 @@
 
       <form @submit.prevent="handleRegister" class="register-form">
         <div class="form-group">
-          <label for="name">Volledige naam</label>
+          <label for="firstName">Voornaam</label>
           <div class="input-container">
             <input
-                id="name"
+                id="firstName"
                 type="text"
-                v-model="name"
-                placeholder="Uw volledige naam"
+                v-model="firstName"
+                placeholder="Uw voornaam"
                 required
-                :class="{ 'input-focus': activeInput === 'name' }"
-                @focus="activeInput = 'name'"
+                :class="{ 'input-focus': activeInput === 'firstName' }"
+                @focus="activeInput = 'firstName'"
+                @blur="activeInput = null"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Achternaam</label>
+          <div class="input-container">
+            <input
+                id="lastName"
+                type="text"
+                v-model="lastName"
+                placeholder="Uw achternaam"
+                required
+                :class="{ 'input-focus': activeInput === 'lastName' }"
+                @focus="activeInput = 'lastName'"
+                @blur="activeInput = null"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="birthDate">Geboortedatum</label>
+          <div class="input-container">
+            <input
+                id="birthDate"
+                type="date"
+                v-model="birthDate"
+                required
+                :class="{ 'input-focus': activeInput === 'birthDate' }"
+                @focus="activeInput = 'birthDate'"
                 @blur="activeInput = null"
             />
           </div>
@@ -49,14 +80,18 @@
                 @focus="activeInput = 'password'"
                 @blur="activeInput = null"
             />
-<!--            <button-->
-<!--                type="button"-->
-<!--                class="toggle-password"-->
-<!--                @click="showPassword = !showPassword"-->
-<!--            >-->
-<!--              {{ showPassword ? '' : '' }}-->
-<!--            </button>-->
+            <button
+                type="button"
+                class="toggle-password"
+                @click="showPassword = !showPassword"
+            >
+              {{ showPassword ? 'Verbergen' : 'Tonen' }}
+            </button>
           </div>
+        </div>
+
+        <div v-if="errorMessage" class="error-message">
+          {{ errorMessage }}
         </div>
 
         <button
@@ -80,32 +115,68 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import api from './api.js';
 
-const name = ref('');
+const firstName = ref('');
+const lastName = ref('');
+const birthDate = ref('');
 const email = ref('');
 const password = ref('');
+const type = ref('USER');
 const router = useRouter();
 const showPassword = ref(false);
 const isLoading = ref(false);
 const activeInput = ref(null);
+const errorMessage = ref('');
 
 const handleRegister = async () => {
-  if (name.value && email.value && password.value) {
+  if (firstName.value && lastName.value && birthDate.value && email.value && password.value) {
     isLoading.value = true;
+    errorMessage.value = '';
 
     try {
-      // Simuleer een API-aanroep
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Maak een gebruiker aan met de register functie
+      const userData = {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        birthDate: birthDate.value,
+        email: email.value,
+        password: password.value,
+        type: type.value
+      };
 
-      console.log(`Geregistreerd als ${name.value}`);
+      const response = await api.createUser(userData);
+
+      console.log(`Succesvol geregistreerd als ${firstName.value} ${lastName.value}`);
+
+      // Naar login pagina sturen:
       router.push('/');
+
     } catch (error) {
-      alert('Er is een fout opgetreden tijdens het registreren.');
+      console.error('Registratie fout:', error);
+
+      // Toon een gebruiksvriendelijke foutmelding
+      if (error.response) {
+        // De server heeft geantwoord met een foutstatuscode
+        if (error.response.status === 409) {
+          errorMessage.value = 'Dit e-mailadres is al in gebruik. Probeer in te loggen of gebruik een ander e-mailadres.';
+        } else if (error.response.status === 400) {
+          errorMessage.value = 'Ongeldige gegevens. Controleer alstublieft uw invoer.';
+        } else {
+          errorMessage.value = 'Er is een fout opgetreden bij het registreren.';
+        }
+      } else if (error.request) {
+        // De request was gemaakt maar er was geen antwoord
+        errorMessage.value = 'Geen verbinding met de server. Probeer het later opnieuw.';
+      } else {
+        // Er is iets misgegaan bij het opzetten van het verzoek
+        errorMessage.value = 'Er is een fout opgetreden. Probeer het opnieuw.';
+      }
     } finally {
       isLoading.value = false;
     }
   } else {
-    alert('Vul alle velden in.');
+    errorMessage.value = 'Vul alle velden in.';
   }
 };
 </script>
@@ -130,7 +201,6 @@ const handleRegister = async () => {
   width: 100%;
   max-width: 550px;
   min-width: 320px;
-  min-height: 500px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -151,12 +221,12 @@ const handleRegister = async () => {
 }
 
 .form-group {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 label {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   font-weight: 500;
   color: #555;
   font-size: 1rem;
@@ -168,23 +238,16 @@ label {
   align-items: center;
 }
 
-.icon {
-  position: absolute;
-  left: 15px;
-  color: #aaa;
-  font-size: 1.2rem;
-}
-
-input {
+input, select {
   width: 100%;
-  padding: 15px 15px 15px 45px;
+  padding: 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   transition: all 0.3s;
 }
 
-input:focus {
+input:focus, select:focus {
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
@@ -201,38 +264,32 @@ input:focus {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1.2rem;
-  color: #777;
+  font-size: 0.9rem;
+  color: #555;
 }
 
 .register-button {
   width: 100%;
   padding: 15px;
-  background: linear-gradient(to right, #48bb78, #38a169);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  position: relative;
   margin-top: 20px;
+  position: relative;
 }
 
-.register-button:hover:not(:disabled) {
-  background: linear-gradient(to right, #3aad6a, #2f8a5a);
+.register-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
 }
 
-.register-button:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.register-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+.register-button:active {
+  transform: translateY(1px);
 }
 
 .button-loading {
@@ -244,67 +301,45 @@ input:focus {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 24px; /* Grotere spinner */
-  height: 24px; /* Grotere spinner */
+  width: 20px;
+  height: 20px;
   border: 3px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  border-top-color: #fff;
+  border-top-color: white;
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  to { transform: translate(-50%, -50%) rotate(360deg); }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 .login-link {
-  text-align: center;
   margin-top: 30px;
+  text-align: center;
+  color: #666;
   font-size: 1rem;
-  color: #555;
 }
 
 .login-link a {
-  color: #48bb78;
+  color: #667eea;
   text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
+  font-weight: 600;
+  transition: color 0.3s;
 }
 
 .login-link a:hover {
-  color: #38a169;
-  text-decoration: underline;
+  color: #764ba2;
 }
 
-@media (max-height: 700px) {
-  .register-card {
-    min-height: auto;
-    padding: 30px;
-  }
-
-  .title {
-    margin-bottom: 25px;
-  }
-
-  .form-group {
-    margin-bottom: 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .register-container {
-    padding: 20px;
-  }
-
-  .register-card {
-    padding: 25px;
-  }
-
-  .title {
-    font-size: 1.8rem;
-  }
-
-  input {
-    padding: 12px 12px 12px 40px;
-  }
+.error-message {
+  color: #e53e3e;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #fff5f5;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: center;
 }
 </style>

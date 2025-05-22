@@ -133,3 +133,27 @@ $RECYCLE.BIN/
 _NCrunch*
 
 *.vsidx
+
+*.db
+
+*.db-shm
+
+*.db-wal
+
+OnderhoudsbuddyDotnet/.vs/OnderhoudsbuddyDotnet/DesignTimeBuild/.dtbcache.v2
+
+OnderhoudsbuddyDotnet/.vs/OnderhoudsbuddyDotnet/v17/.futdcache.v2
+
+OnderhoudsbuddyDotnet/.vs/OnderhoudsbuddyDotnet/v17/DocumentLayout.backup.json
+
+OnderhoudsbuddyDotnet/.vs/OnderhoudsbuddyDotnet/v17/DocumentLayout.json
+
+OnderhoudsbuddyDotnet/.vs/OnderhoudsbuddyDotnet/v17/TestStore/0/000.testlog
+
+OnderhoudsbuddyDotnet/.vs/OnderhoudsbuddyDotnet/v17/TestStore/0/testlog.manifest
+
+OnderhoudsbuddyDotnet/.vs/ProjectEvaluation/onderhoudsbuddydotnet.metadata.v9.bin
+
+OnderhoudsbuddyDotnet/.vs/ProjectEvaluation/onderhoudsbuddydotnet.projects.v9.bin
+
+OnderhoudsbuddyDotnet/.vs/ProjectEvaluation/onderhoudsbuddydotnet.strings.v9.bin
