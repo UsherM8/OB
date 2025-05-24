@@ -46,6 +46,12 @@ public class UserService implements IUserService, UserDetailsService {
                 .collect(Collectors.toList());
     }
 
+    public UserEntity findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Gebruiker met email '" + email + "' niet gevonden."));
+    }
+
+
     public UserDto getUserById(Integer id) {
         return userRepository.findById(id)
                 .map(this::mapToDto)
@@ -53,11 +59,17 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     public UserDto createUser(UserDto dto, String password) {
-        UserEntity entity = mapToEntity(dto);
-        String encodedPassword = bCryptPasswordEncoder.encode(password);
-        entity.setPassword(encodedPassword);
-        UserEntity saved = userRepository.save(entity);
-        return mapToDto(saved);
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new RuntimeException("Gebruiker met email '" + dto.getEmail() + "' bestaat al.");
+        }
+        else
+        {
+            UserEntity entity = mapToEntity(dto);
+            String encodedPassword = bCryptPasswordEncoder.encode(password);
+            entity.setPassword(encodedPassword);
+            UserEntity saved = userRepository.save(entity);
+            return mapToDto(saved);
+        }
     }
 
     public UserDto updateUser(UserDto dto) {

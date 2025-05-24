@@ -1,3 +1,52 @@
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import api from './api.js';
+
+const firstName = ref('');
+const lastName = ref('');
+const birthDate = ref('');
+const email = ref('');
+const password = ref('');
+const type = ref('USER');
+const router = useRouter();
+const showPassword = ref(false);
+const isLoading = ref(false);
+const activeInput = ref(null);
+const errorMessage = ref('');
+
+const handleRegister = async () => {
+  if (firstName.value && lastName.value && birthDate.value && email.value && password.value) {
+    isLoading.value = true;
+    errorMessage.value = '';
+
+    try {
+      const userData = {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        birthDate: birthDate.value,
+        email: email.value,
+        password: password.value,
+        type: type.value
+      };
+
+      await api.createUser(userData);
+      router.push('/');
+
+    } catch (error) {
+      console.error('Registratiefout:', error.message);
+      console.error('Status code:', error.response?.status);
+      console.error('Foutgegevens van server:', error.response?.data);
+      errorMessage.value = 'Er bestaat al een gebruiker met dit e-mailadres.';
+    } finally {
+      isLoading.value = false;
+    }
+  } else {
+    errorMessage.value = 'Vul alle velden in.';
+  }
+};
+</script>
+
 <template>
   <div class="register-container">
     <div class="register-card">
@@ -111,75 +160,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import api from './api.js';
-
-const firstName = ref('');
-const lastName = ref('');
-const birthDate = ref('');
-const email = ref('');
-const password = ref('');
-const type = ref('USER');
-const router = useRouter();
-const showPassword = ref(false);
-const isLoading = ref(false);
-const activeInput = ref(null);
-const errorMessage = ref('');
-
-const handleRegister = async () => {
-  if (firstName.value && lastName.value && birthDate.value && email.value && password.value) {
-    isLoading.value = true;
-    errorMessage.value = '';
-
-    try {
-      // Maak een gebruiker aan met de register functie
-      const userData = {
-        firstName: firstName.value,
-        lastName: lastName.value,
-        birthDate: birthDate.value,
-        email: email.value,
-        password: password.value,
-        type: type.value
-      };
-
-      const response = await api.createUser(userData);
-
-      console.log(`Succesvol geregistreerd als ${firstName.value} ${lastName.value}`);
-
-      // Naar login pagina sturen:
-      router.push('/');
-
-    } catch (error) {
-      console.error('Registratie fout:', error);
-
-      // Toon een gebruiksvriendelijke foutmelding
-      if (error.response) {
-        // De server heeft geantwoord met een foutstatuscode
-        if (error.response.status === 409) {
-          errorMessage.value = 'Dit e-mailadres is al in gebruik. Probeer in te loggen of gebruik een ander e-mailadres.';
-        } else if (error.response.status === 400) {
-          errorMessage.value = 'Ongeldige gegevens. Controleer alstublieft uw invoer.';
-        } else {
-          errorMessage.value = 'Er is een fout opgetreden bij het registreren.';
-        }
-      } else if (error.request) {
-        // De request was gemaakt maar er was geen antwoord
-        errorMessage.value = 'Geen verbinding met de server. Probeer het later opnieuw.';
-      } else {
-        // Er is iets misgegaan bij het opzetten van het verzoek
-        errorMessage.value = 'Er is een fout opgetreden. Probeer het opnieuw.';
-      }
-    } finally {
-      isLoading.value = false;
-    }
-  } else {
-    errorMessage.value = 'Vul alle velden in.';
-  }
-};
-</script>
 
 <style scoped>
 .register-container {

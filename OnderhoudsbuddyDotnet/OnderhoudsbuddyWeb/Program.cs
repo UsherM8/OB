@@ -13,9 +13,11 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<ICar, CarRepository>();
 builder.Services.AddScoped<ICarContainer, CarContainer>();
 builder.Services.AddAutoMapper(typeof(CarMapper));
-builder.Services.AddDbContext<OnderhoudsbuddyDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDbContext<OnderhoudsbuddyDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddHttpClient<RdwApiClient>(client =>
@@ -33,8 +35,10 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
-
-// En in de app configuratie, voor de endpoints/controllers
+builder.Services.AddDbContext<OnderhoudsbuddyDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
 
 var app = builder.Build();
 

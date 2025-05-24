@@ -19,7 +19,7 @@ axios.interceptors.response.use(
   }
 );
 const apiClientDotnet = axios.create({
-    baseURL: 'https://localhost:44393',
+    baseURL: 'https://localhost:7259',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -50,8 +50,8 @@ export default {
         return apiClientDotnet.get(`/api/Car/details/${id}`);
     },
 
-    addCar(carData) {
-        return apiClientDotnet.post('/api/Car', carData);
+    addCar(carData, userId) {
+        return apiClientDotnet.post(`/api/Car/user/${userId}`, carData);
     },
 
     updateCar(licensePlate, carData) {
@@ -61,6 +61,15 @@ export default {
     deleteCar(id) {
         return apiClientDotnet.delete(`/api/Car/${id}`);
     },
+
+    getUserCars(userId) {
+        return apiClientDotnet.get(`/api/Car/user/${userId}/cars`);
+    },
+
+    getUserCar(userId, carId) {
+        return apiClientDotnet.get(`/api/Car/user/${userId}/car/${carId}`);
+    },
+
     // User endpoints
     getAllUsers() {
         return apiClientJava.get('/api/users');
@@ -99,5 +108,4 @@ export default {
     clearAuthToken() {
         delete apiClientJava.defaults.headers.common['Authorization'];
     }
-
 };

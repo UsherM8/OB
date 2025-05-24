@@ -40,10 +40,9 @@ public class CarContainer : ICarContainer
         return car;
     }
 
-    public async Task AddCarAsync(Car car)
+    public async Task AddCarAsync(int userId, string licensePlate, int mileage)
     {
-        var carDto = CarMapper.ToDto(car);
-        await _carRepository.AddCarAsync(carDto);
+        await _carRepository.AddCarAsync( userId,  licensePlate, mileage);
     }
 
     public async Task UpdateCarAsync(Car car)
@@ -55,5 +54,16 @@ public class CarContainer : ICarContainer
     public async Task DeleteCarAsync(int id)
     {
         await _carRepository.DeleteCarAsync(id);
+    }
+    public async Task<List<Car>> GetAllFullCarsForUserAsync(int userId)
+    {
+        var carDtos = await _carRepository.GetAllFullCarsForUserAsync(userId);
+        return carDtos.Select(CarMapper.MapFromRdw).ToList();
+    }
+
+    public async Task<Car?> GetCarForUserAsync(int userId, int carId)
+    {
+        var carDto = await _carRepository.GetCarForUserAsync(userId, carId);
+        return carDto != null ? CarMapper.MapFromRdw(carDto) : null;
     }
 }

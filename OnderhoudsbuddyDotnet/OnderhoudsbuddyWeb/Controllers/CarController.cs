@@ -49,8 +49,8 @@ public class CarController : ControllerBase
         return Ok(CarModelMapper.ToModel(car));
     }
     
-    [HttpPost]
-    public async Task<ActionResult> AddCar([FromBody] CarModel carModel)
+   [HttpPost("user/{userId}")]
+    public async Task<ActionResult> AddCar(int userId, [FromBody] CarModel carModel)
     {
         if (!ModelState.IsValid)
         {
@@ -58,7 +58,7 @@ public class CarController : ControllerBase
         }
 
         var car = CarModelMapper.ToEntity(carModel);
-        await _carContainer.AddCarAsync(car);
+        await _carContainer.AddCarAsync(userId, car.LicensePlate, car.Mileage);
 
         return CreatedAtAction(nameof(GetCarAsync), new { id = car.CarId }, carModel);
     }
@@ -87,5 +87,25 @@ public class CarController : ControllerBase
     {
         await _carContainer.DeleteCarAsync(id);
         return NoContent();
+    }
+    [HttpGet("user/{userId}/cars")]
+    public async Task<ActionResult<List<CarModel>>> GetAllFullCarsForUserAsync(int userId)
+    {
+        var cars = await _carContainer.GetAllFullCarsForUserAsync(userId);
+        if (cars == null || !cars.Any())
+            return NotFound();
+
+        var carModels = cars.Select(CarModelMapper.FullCar).ToList();
+        return Ok(carModels);
+    }
+
+    [HttpGet("user/{userId}/car/{carId}")]
+    public async Task<ActionResult<CarModel>> GetCarForUserAsync(int userId, int carId)
+    {
+        var car = await _carContainer.GetCarForUserAsync(userId, carId);
+        if (car == null)
+            return NotFound();
+
+        return Ok(CarModelMapper.FullCar(car));
     }
 }

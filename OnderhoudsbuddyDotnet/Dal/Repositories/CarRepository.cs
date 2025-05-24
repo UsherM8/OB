@@ -1,4 +1,5 @@
-﻿using Dal.Services;
+﻿using Dal.Entities;
+using Dal.Services;
 using Domain.Dtos;
 using Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
@@ -17,43 +18,167 @@ public class CarRepository : ICar
     }
 
     public async Task<CarDto?> GetCarByIdAsync(int id)
-    {   
-        CarDto carDto = await _context.Cars.FindAsync(id);
-        CarDto carDto2 = await _rdwApiClient.GetCarAsync(carDto.LicensePlate); 
-        return carDto2;
+    {
+        var car = await _context.Cars.FindAsync(id);
+        if (car == null) return null;
+        var carDto = await _rdwApiClient.GetCarAsync(car.LicensePlate);
+        carDto.Mileage = car.Mileage;
+        return carDto;
     }
-    
+
     public async Task<CarDto?> GetCarByLicenseAsync(string licensePlate)
     {
-        CarDto carDto = await _rdwApiClient.GetCarAsync(licensePlate); 
+        var car = await _context.Cars.FirstOrDefaultAsync(c => c.LicensePlate == licensePlate);
+        if (car == null) return null;
+        var carDto = await _rdwApiClient.GetCarAsync(licensePlate);
+        carDto.Mileage = car.Mileage;
         return carDto;
+    }
+
+    public async Task<CarDto?> GetCarForUserAsync(int userId, int carId)
+    {
+        var userCar = await _context.UserCars
+            .FirstOrDefaultAsync(uc => uc.UserId == userId && uc.CarId == carId);
+
+        if (userCar == null)
+            return null;
+
+        var car = await _context.Cars
+            .FirstOrDefaultAsync(c => c.CarId == carId);
+
+        if (car == null)
+            return null;
+
+        var carDto = await _rdwApiClient.GetCarAsync(car.LicensePlate);
+        carDto.Mileage = car.Mileage;
+        return carDto;
+    }
+
+    public async Task<List<CarDto>> GetAllFullCarsForUserAsync(int userId)
+    {
+        var licensePlates = await _context.UserCars
+            .Where(uc => uc.UserId == userId)
+            .Join(
+                _context.Cars,
+                uc => uc.CarId,
+                c => c.CarId,
+                (uc, c) => c.LicensePlate
+            )
+            .ToListAsync();
+
+        var carTasks = licensePlates
+            .Select(async licensePlate =>
+            {
+                var car = await _context.Cars.FirstOrDefaultAsync(c => c.LicensePlate == licensePlate);
+                if (car == null) return null;
+                var carDto = await _rdwApiClient.GetCarAsync(licensePlate);
+                carDto.Mileage = car.Mileage;
+                return carDto;
+            })
+            .ToList();
+
+        var fullCars = await Task.WhenAll(carTasks);
+
+        return fullCars.Where(car => car != null).ToList()!;
     }
 
     public async Task<CarDto?> GetCarAsync(int id)
     {
-        CarDto carDto = await _context.Cars.FindAsync(id);
+        var car = await _context.Cars.FindAsync(id);
+        if (car == null) return null;
+        var carDto = new CarDto
+        {
+            CarId = car.CarId,
+            LicensePlate = car.LicensePlate,
+            Mileage = car.Mileage
+        };
         return carDto;
-    }
-
-    public async Task AddCarAsync(CarDto carDto)
-    {
-        await _context.Cars.AddAsync(carDto);
-        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateCarAsync(CarDto carDto)
     {
-        _context.Cars.Update(carDto);
-        await _context.SaveChangesAsync();
+        var existingCar = await _context.Cars.FindAsync(carDto.CarId);
+        if (existingCar != null)
+        {
+            existingCar.Mileage = carDto.Mileage;
+            await _context.SaveChangesAsync();
+        }
     }
 
     public async Task DeleteCarAsync(int id)
     {
-        var carDto = await GetCarAsync(id);
-        if (carDto != null)
+        var userCarLinks = await _context.UserCars
+            .Where(uc => uc.CarId == id)
+            .ToListAsync();
+
+        if (userCarLinks.Any())
         {
-            _context.Cars.Remove(carDto);
+            _context.UserCars.RemoveRange(userCarLinks);
+        }
+
+        var car = await _context.Cars.FindAsync(id);
+        if (car != null)
+        {
+            _context.Cars.Remove(car);
             await _context.SaveChangesAsync();
+        }
+    }
+
+    public async Task AddCarAsync(int userId, string licensePlate, int mileage)
+    {
+        try
+        {
+            var carsWithPlate = await _context.Cars
+                .Where(c => c.LicensePlate == licensePlate)
+                .ToListAsync();
+
+            if (carsWithPlate.Any())
+                throw new Exception("Car with this license plate already exists.");
+
+            var car = new Car
+            {
+                LicensePlate = licensePlate,
+                Mileage = mileage
+            };
+            await _context.Cars.AddAsync(car);
+            await _context.SaveChangesAsync();
+
+            bool linkExists = await _context.UserCars
+                .AnyAsync(uc => uc.UserId == userId && uc.CarId == car.CarId);
+
+            if (!linkExists)
+            {
+                var userCar = new UserCar
+                {
+                    UserId = userId,
+                    CarId = car.CarId
+                };
+                await _context.UserCars.AddAsync(userCar);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("Car is already linked to the user.");
+            }
+        }
+        catch (DbUpdateException dbEx)
+        {
+            Console.WriteLine("DbUpdateException: " + dbEx.Message);
+            if (dbEx.InnerException != null)
+                Console.WriteLine("InnerException: " + dbEx.InnerException.Message);
+            throw;
+        }
+        catch (InvalidOperationException invOpEx)
+        {
+            Console.WriteLine("InvalidOperationException: " + invOpEx.Message);
+            throw;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Exception: " + ex.Message);
+            if (ex.InnerException != null)
+                Console.WriteLine("InnerException: " + ex.InnerException.Message);
+            throw;
         }
     }
 }

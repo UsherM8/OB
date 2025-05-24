@@ -51,82 +51,55 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import api from './api.js';
 
-
-const router = useRouter();
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
 const isLoading = ref(false);
+const router = useRouter();
 
-async function handleLogin() {
-  if (isLoading.value) return;
+const handleLogin = async () => {
+  if (!email.value || !password.value) {
+    errorMessage.value = 'Vul zowel e-mail als wachtwoord in.';
+    return;
+  }
 
-  errorMessage.value = '';
   isLoading.value = true;
+  errorMessage.value = '';
 
   try {
-    // Debug: Log inlogpoging
     console.log('Inlogpoging voor:', email.value);
-
-    // Gebruik je API service in plaats van directe axios call
     const response = await api.login(email.value, password.value);
+    console.log('API respons:', response);
 
-    // Debug: Log volledige respons
-    console.log('API respons:', response.data);
+    // Sla token op
+    const token = response.data.token;
+    localStorage.setItem('token', token);
+    console.log('Token opgeslagen in localStorage:', token);
 
-    // Controleer of de inlogpoging succesvol was
-    if (response.data && response.data.token) {
-      // Sla token op in localStorage
-      localStorage.setItem('token', response.data.token);
+    // Sla gebruikers-ID op dat nu wordt teruggestuurd door de API
+    const userId = response.data.userId;
 
-      // Stel de auth token in voor toekomstige requests
-      api.setAuthToken(response.data.token);
+    // Sla gebruikersgegevens op in localStorage
+    const userData = {
+      id: userId,
+      email: email.value
+    };
 
-      // Debug: Controleer of de token correct is opgeslagen
-      console.log('Token opgeslagen in localStorage:', localStorage.getItem('token'));
+    localStorage.setItem('userInfo', JSON.stringify(userData));
+    console.log('Gebruikersgegevens opgeslagen:', userData);
 
-      // Sla eventueel gebruikersgegevens op als die beschikbaar zijn
-      if (response.data.user) {
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-      }
+    // Stel auth token in voor volgende API aanroepen
+    api.setAuthToken(token);
 
-      console.log('Succesvol ingelogd als', email.value);
-
-      // Navigeer naar de homepagina
-      router.push('/home');
-    } else {
-      // De server gaf een succesvolle respons, maar zonder token
-      console.error('Geen token ontvangen in de respons:', response.data);
-      errorMessage.value = 'Er is een probleem met inloggen. Probeer het opnieuw.';
-    }
+    console.log('Succesvol ingelogd als', email.value);
+    router.push('/home');
   } catch (error) {
-    // Er is een fout opgetreden bij het maken van het verzoek
-    console.error('Login fout:', error);
-
-    // Toon een gepast foutbericht afhankelijk van de fout
-    if (error.response) {
-      // De server gaf een foutrespons (401, 403, etc.)
-      console.error('Server foutrespons:', error.response.data);
-
-      if (error.response.status === 401) {
-        errorMessage.value = 'Ongeldige inloggegevens. Controleer je e-mail en wachtwoord.';
-      } else if (error.response.status === 429) {
-        errorMessage.value = 'Te veel inlogpogingen. Probeer het later opnieuw.';
-      } else {
-        errorMessage.value = 'Inloggen mislukt: ' + (error.response.data.message || 'Onbekende fout');
-      }
-    } else if (error.request) {
-      // Het verzoek werd gemaakt maar er kwam geen antwoord
-      console.error('Geen antwoord van server:', error.request);
-      errorMessage.value = 'Geen antwoord van de server. Controleer je internetverbinding.';
-    } else {
-      // Er is iets misgegaan bij het opzetten van het verzoek
-      errorMessage.value = 'Er is een fout opgetreden. Probeer het later opnieuw.';
-    }
+    console.error('Inlogfout:', error);
+    errorMessage.value = 'Ongeldige e-mail of wachtwoord.';
   } finally {
     isLoading.value = false;
   }
-}
+};
 </script>
 
 <style scoped>

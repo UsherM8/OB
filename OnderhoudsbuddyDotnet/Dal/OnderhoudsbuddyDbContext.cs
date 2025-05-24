@@ -1,49 +1,37 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Domain.Dtos;
+using Dal.Entities;
 
 namespace Dal
 {
     public class OnderhoudsbuddyDbContext : DbContext
     {
-        public OnderhoudsbuddyDbContext(DbContextOptions<OnderhoudsbuddyDbContext> options) 
+        public OnderhoudsbuddyDbContext(DbContextOptions<OnderhoudsbuddyDbContext> options)
             : base(options)
         {
         }
 
-        public DbSet<CarDto> Cars { get; set; } = null!;
-        public DbSet<UserCarDto> UserCars { get; set; } = null!;
-        public DbSet<ServiceDto> Services { get; set; } = null!;
-        public DbSet<GarageDto> Garages { get; set; } = null!;
+        public DbSet<Car> Cars { get; set; } = null!;
+        public DbSet<UserCar> UserCars { get; set; } = null!;
+        public DbSet<Service> Services { get; set; } = null!;
+        public DbSet<Garage> Garages { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<CarDto>(entity =>
+            modelBuilder.Entity<Car>(entity =>
             {
                 entity.HasKey(e => e.CarId);
 
                 entity.Property(e => e.LicensePlate)
                     .IsRequired()
                     .HasMaxLength(50);
-                
+
                 entity.Property(e => e.Mileage)
-                    .IsRequired()
-                    .HasMaxLength(50);
-                
-                // Uitsluiten van overige eigenschappen
-                entity.Ignore(e => e.Brand);
-                entity.Ignore(e => e.TradeName);
-                entity.Ignore(e => e.VehicleType);
-                entity.Ignore(e => e.PrimaryColor);
-                entity.Ignore(e => e.ApkExpiryDate);
-                entity.Ignore(e => e.EmptyVehicleMass);
-                entity.Ignore(e => e.RegistrationDate);
-                entity.Ignore(e => e.FirstAdmissionDate);
-                entity.Ignore(e => e.MileageJudgment);
+                    .IsRequired();
             });
 
-            modelBuilder.Entity<UserCarDto>(entity =>
+            modelBuilder.Entity<UserCar>(entity =>
             {
                 entity.HasKey(e => e.UserCarId);
                 entity.Property(e => e.UserId)
@@ -52,18 +40,15 @@ namespace Dal
                     .IsRequired();
             });
 
-            modelBuilder.Entity<ServiceDto>(entity =>
+            modelBuilder.Entity<Service>(entity =>
             {
                 entity.HasKey(e => e.ServiceId);
                 entity.Property(e => e.ServiceType)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                    .IsRequired();
                 entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                    .IsRequired();
                 entity.Property(e => e.Description)
-                    .IsRequired()
-                    .HasMaxLength(500);
+                    .IsRequired();
                 entity.Property(e => e.ServiceDate)
                     .IsRequired();
                 entity.Property(e => e.NextServiceDate)
@@ -74,7 +59,7 @@ namespace Dal
                     .IsRequired();
             });
 
-            modelBuilder.Entity<GarageDto>(entity =>
+            modelBuilder.Entity<Garage>(entity =>
             {
                 entity.HasKey(e => e.GarageId);
                 entity.Property(e => e.Name)
