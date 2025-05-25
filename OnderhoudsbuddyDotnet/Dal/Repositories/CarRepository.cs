@@ -22,6 +22,8 @@ public class CarRepository : ICar
         var car = await _context.Cars.FindAsync(id);
         if (car == null) return null;
         var carDto = await _rdwApiClient.GetCarAsync(car.LicensePlate);
+        if (carDto == null) return null;
+        carDto.CarId = car.CarId;
         carDto.Mileage = car.Mileage;
         return carDto;
     }
@@ -31,6 +33,8 @@ public class CarRepository : ICar
         var car = await _context.Cars.FirstOrDefaultAsync(c => c.LicensePlate == licensePlate);
         if (car == null) return null;
         var carDto = await _rdwApiClient.GetCarAsync(licensePlate);
+        if (carDto == null) return null;
+        carDto.CarId = car.CarId;
         carDto.Mileage = car.Mileage;
         return carDto;
     }
@@ -50,29 +54,31 @@ public class CarRepository : ICar
             return null;
 
         var carDto = await _rdwApiClient.GetCarAsync(car.LicensePlate);
+        if (carDto == null) return null;
+        carDto.CarId = car.CarId;
         carDto.Mileage = car.Mileage;
         return carDto;
     }
 
     public async Task<List<CarDto>> GetAllFullCarsForUserAsync(int userId)
     {
-        var licensePlates = await _context.UserCars
+        var cars = await _context.UserCars
             .Where(uc => uc.UserId == userId)
             .Join(
                 _context.Cars,
                 uc => uc.CarId,
                 c => c.CarId,
-                (uc, c) => c.LicensePlate
+                (uc, c) => c
             )
             .ToListAsync();
 
-        var carTasks = licensePlates
-            .Select(async licensePlate =>
+        var carTasks = cars
+            .Select(async car =>
             {
-                var car = await _context.Cars.FirstOrDefaultAsync(c => c.LicensePlate == licensePlate);
-                if (car == null) return null;
-                var carDto = await _rdwApiClient.GetCarAsync(licensePlate);
-                carDto.Mileage = car.Mileage;
+                var carDto = await _rdwApiClient.GetCarAsync(car.LicensePlate);
+                if (carDto == null) return null;
+                carDto.CarId = car.CarId;      // Set the local CarId
+                carDto.Mileage = car.Mileage;  // Set the local Mileage
                 return carDto;
             })
             .ToList();
@@ -126,59 +132,36 @@ public class CarRepository : ICar
 
     public async Task AddCarAsync(int userId, string licensePlate, int mileage)
     {
-        try
+        var car = await _context.Cars.FirstOrDefaultAsync(c => c.LicensePlate == licensePlate);
+
+        if (car == null)
         {
-            var carsWithPlate = await _context.Cars
-                .Where(c => c.LicensePlate == licensePlate)
-                .ToListAsync();
-
-            if (carsWithPlate.Any())
-                throw new Exception("Car with this license plate already exists.");
-
-            var car = new Car
+            car = new Car
             {
                 LicensePlate = licensePlate,
                 Mileage = mileage
             };
             await _context.Cars.AddAsync(car);
             await _context.SaveChangesAsync();
+        }
 
-            bool linkExists = await _context.UserCars
-                .AnyAsync(uc => uc.UserId == userId && uc.CarId == car.CarId);
+        bool linkExists = await _context.UserCars.AnyAsync(uc => uc.UserId == userId && uc.CarId == car.CarId);
 
-            if (!linkExists)
+        if (!linkExists)
+        {
+            var userCar = new UserCar
             {
-                var userCar = new UserCar
-                {
-                    UserId = userId,
-                    CarId = car.CarId
-                };
-                await _context.UserCars.AddAsync(userCar);
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-                throw new Exception("Car is already linked to the user.");
-            }
+                UserId = userId,
+                CarId = car.CarId
+            };
+            await _context.UserCars.AddAsync(userCar);
+            await _context.SaveChangesAsync();
         }
-        catch (DbUpdateException dbEx)
+        else
         {
-            Console.WriteLine("DbUpdateException: " + dbEx.Message);
-            if (dbEx.InnerException != null)
-                Console.WriteLine("InnerException: " + dbEx.InnerException.Message);
-            throw;
+            throw new Exception("Car is already linked to the user.");
         }
-        catch (InvalidOperationException invOpEx)
-        {
-            Console.WriteLine("InvalidOperationException: " + invOpEx.Message);
-            throw;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Exception: " + ex.Message);
-            if (ex.InnerException != null)
-                Console.WriteLine("InnerException: " + ex.InnerException.Message);
-            throw;
-        }
+
+
     }
 }

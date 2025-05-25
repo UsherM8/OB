@@ -50,7 +50,7 @@ public class CarController : ControllerBase
     }
     
    [HttpPost("user/{userId}")]
-    public async Task<ActionResult> AddCar(int userId, [FromBody] CarModel carModel)
+    public async Task<ActionResult<CarModel>> AddCar(int userId, [FromBody] CarModel carModel)
     {
         if (!ModelState.IsValid)
         {
@@ -59,8 +59,7 @@ public class CarController : ControllerBase
 
         var car = CarModelMapper.ToEntity(carModel);
         await _carContainer.AddCarAsync(userId, car.LicensePlate, car.Mileage);
-
-        return CreatedAtAction(nameof(GetCarAsync), new { id = car.CarId }, carModel);
+        return Created();
     }
     
     [HttpPut("{licensePlate}")]

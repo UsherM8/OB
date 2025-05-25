@@ -104,7 +104,6 @@ export default {
         apiClientJava.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     },
 
-    // Helper functie voor het verwijderen van de auth token
     clearAuthToken() {
         delete apiClientJava.defaults.headers.common['Authorization'];
     }

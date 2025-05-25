@@ -28,7 +28,9 @@ public static class CarModelMapper
     {
         return new CarModel
         {
+            CarId = carModel.CarId,
             LicensePlate = carModel.LicensePlate,
+            Mileage = carModel.Mileage,
             Brand = carModel.Brand,
             TradeName = carModel.TradeName,
             VehicleType = carModel.VehicleType,

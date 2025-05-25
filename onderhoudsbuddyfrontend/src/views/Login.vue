@@ -71,15 +71,12 @@ const handleLogin = async () => {
     const response = await api.login(email.value, password.value);
     console.log('API respons:', response);
 
-    // Sla token op
     const token = response.data.token;
     localStorage.setItem('token', token);
     console.log('Token opgeslagen in localStorage:', token);
 
-    // Sla gebruikers-ID op dat nu wordt teruggestuurd door de API
     const userId = response.data.userId;
 
-    // Sla gebruikersgegevens op in localStorage
     const userData = {
       id: userId,
       email: email.value
@@ -88,7 +85,6 @@ const handleLogin = async () => {
     localStorage.setItem('userInfo', JSON.stringify(userData));
     console.log('Gebruikersgegevens opgeslagen:', userData);
 
-    // Stel auth token in voor volgende API aanroepen
     api.setAuthToken(token);
 
     console.log('Succesvol ingelogd als', email.value);
