@@ -1,6 +1,7 @@
-﻿namespace Domain.Dtos
+﻿
+namespace Business.Classes
 {
-    public class ServiceDto
+    public class Service
     {
         public int ServiceId { get; set; }
         public int CarId { get; set; }

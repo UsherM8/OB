@@ -1,6 +1,12 @@
-﻿namespace Domain.Dtos
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Models.Models
 {
-    public class GarageDto
+    public class GarageModel
     {
         public int GarageId { get; set; }
         public string Name { get; set; }

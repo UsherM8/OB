@@ -1,6 +1,7 @@
-﻿namespace Domain.Dtos
+﻿
+namespace Business.Classes
 {
-    public class GarageDto
+    public class Garage
     {
         public int GarageId { get; set; }
         public string Name { get; set; }

@@ -175,7 +175,6 @@ const formatWeight = (weight) => {
 </template>
 
 <style scoped>
-/* Hier blijft de CSS hetzelfde als in het vorige voorbeeld */
 .user-cars-container {
   max-width: 1200px;
   margin: 0 auto;

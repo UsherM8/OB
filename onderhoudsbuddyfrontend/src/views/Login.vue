@@ -99,7 +99,6 @@ const handleLogin = async () => {
 </script>
 
 <style scoped>
-/* Bestaande CSS behouden */
 .login-container {
   display: flex;
   justify-content: center;

@@ -77,8 +77,8 @@ public class CarRepository : ICar
             {
                 var carDto = await _rdwApiClient.GetCarAsync(car.LicensePlate);
                 if (carDto == null) return null;
-                carDto.CarId = car.CarId;      // Set the local CarId
-                carDto.Mileage = car.Mileage;  // Set the local Mileage
+                carDto.CarId = car.CarId;    
+                carDto.Mileage = car.Mileage;
                 return carDto;
             })
             .ToList();

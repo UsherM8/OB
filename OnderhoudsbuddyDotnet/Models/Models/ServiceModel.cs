@@ -1,6 +1,12 @@
-﻿namespace Domain.Dtos
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Models.Models
 {
-    public class ServiceDto
+    public class ServiceModel
     {
         public int ServiceId { get; set; }
         public int CarId { get; set; }
