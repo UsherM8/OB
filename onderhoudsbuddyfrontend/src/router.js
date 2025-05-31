@@ -5,8 +5,9 @@ import Home from './views/Home.vue';
 import CarRegister from "@/views/CarRegister.vue";
 import SearchCar from "@/views/SearchCar.vue";
 import UserCar from "@/views/UserCar.vue";
-import CarDetails from "@/views/CarView.vue";
-import CarEdit from "@/views/Service.vue";
+import Service from "@/views/Service.vue";
+import AddService from "@/views/AddService.vue";
+import CarService from "@/views/CarService.vue";
 
 const routes = [
     { path: '/', component: Login },
@@ -16,18 +17,9 @@ const routes = [
     { path: '/CarRegister', component: CarRegister },
     { path: '/SearchCar', component: SearchCar },
     { path: '/UserCar', component: UserCar },
-    {
-        path: '/car-details/:carId',
-        name: 'CarDetails',
-        component: CarDetails,
-        props: true,
-    },
-    {
-        path: '/car-edit/:carId',
-        name: 'CarEdit',
-        component: CarEdit,
-        props: true,
-    },
+    { path: '/Service/:serviceId', component: Service },
+    { path: '/CarService/:carId', component: CarService },
+    { path: '/AddService/:carId', component: AddService }
 ];
 
 const router = createRouter({

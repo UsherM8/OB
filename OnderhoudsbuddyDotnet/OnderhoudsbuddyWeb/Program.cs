@@ -13,6 +13,15 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<ICar, CarRepository>();
 builder.Services.AddScoped<ICarContainer, CarContainer>();
 builder.Services.AddAutoMapper(typeof(CarMapper));
+
+builder.Services.AddScoped<IGarage, GarageRepository>();
+builder.Services.AddScoped<IGarageContainer, GarageContainer>();
+builder.Services.AddScoped<GarageMapper>();
+
+builder.Services.AddScoped<IService, ServiceRepository>();
+builder.Services.AddScoped<IServiceContainer, ServiceContainer>();
+builder.Services.AddScoped<ServiceMapper>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<OnderhoudsbuddyDbContext>(options =>
     options.UseMySql(

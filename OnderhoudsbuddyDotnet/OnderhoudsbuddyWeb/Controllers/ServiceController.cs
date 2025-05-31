@@ -42,7 +42,7 @@ namespace OnderhoudsbuddyWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceModel>> CreateGarageAsync([FromBody] ServiceModel serviceModel)
+        public async Task<ActionResult<ServiceModel>> CreateServiceAsync([FromBody] ServiceModel serviceModel)
         {
             if (!ModelState.IsValid)
             {
@@ -50,7 +50,7 @@ namespace OnderhoudsbuddyWeb.Controllers
             }
             var service = ServiceModelMapper.ToEntity(serviceModel);
             await _serviceContainer.CreateServiceAsync(service);
-            return CreatedAtAction(nameof(GetServiceByIdAsync), new { id = service.ServiceId }, ServiceModelMapper.ToModel(service));
+            return Ok(serviceModel);
         }
     }
 }

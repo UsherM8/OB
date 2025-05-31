@@ -9,10 +9,10 @@ namespace Dal.Entities
 
         public int CarId { get; set; }
         public int GarageId { get; set; }
-        public int ServiceType { get; set; }
-        public int Status { get; set; }
+        public string ServiceType { get; set; }
+        public string Status { get; set; }
         public DateTime ServiceDate { get; set; }
         public DateTime NextServiceDate { get; set; }
-        public int Description { get; set; }
+        public string Description { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace Dal.Migrations
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Domain.Dtos.CarDto", b =>
+            modelBuilder.Entity("Dal.Entities.Car", b =>
                 {
                     b.Property<int>("CarId")
                         .ValueGeneratedOnAdd()
@@ -28,11 +28,9 @@ namespace Dal.Migrations
                     b.Property<string>("LicensePlate")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("Relational:JsonPropertyName", "kenteken");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("Mileage")
-                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.HasKey("CarId");
@@ -40,7 +38,7 @@ namespace Dal.Migrations
                     b.ToTable("Cars");
                 });
 
-            modelBuilder.Entity("Domain.Dtos.GarageDto", b =>
+            modelBuilder.Entity("Dal.Entities.Garage", b =>
                 {
                     b.Property<int>("GarageId")
                         .ValueGeneratedOnAdd()
@@ -91,7 +89,7 @@ namespace Dal.Migrations
                     b.ToTable("Garages");
                 });
 
-            modelBuilder.Entity("Domain.Dtos.ServiceDto", b =>
+            modelBuilder.Entity("Dal.Entities.Service", b =>
                 {
                     b.Property<int>("ServiceId")
                         .ValueGeneratedOnAdd()
@@ -100,9 +98,9 @@ namespace Dal.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("int");
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("GarageId")
                         .HasColumnType("int");
@@ -113,20 +111,20 @@ namespace Dal.Migrations
                     b.Property<DateTime>("ServiceDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("ServiceType")
-                        .HasMaxLength(100)
-                        .HasColumnType("int");
+                    b.Property<string>("ServiceType")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.Property<int>("Status")
-                        .HasMaxLength(50)
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("ServiceId");
 
                     b.ToTable("Services");
                 });
 
-            modelBuilder.Entity("Domain.Dtos.UserCarDto", b =>
+            modelBuilder.Entity("Dal.Entities.UserCar", b =>
                 {
                     b.Property<int>("UserCarId")
                         .ValueGeneratedOnAdd()

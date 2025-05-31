@@ -59,7 +59,7 @@ public class CarController : ControllerBase
 
         var car = CarModelMapper.ToEntity(carModel);
         await _carContainer.AddCarAsync(userId, car.LicensePlate, car.Mileage);
-        return Created();
+        return Ok();
     }
     
     [HttpPut("{licensePlate}")]
@@ -78,7 +78,7 @@ public class CarController : ControllerBase
         var car = CarModelMapper.ToEntity(carModel);
         await _carContainer.UpdateCarAsync(car);
 
-        return NoContent();
+        return Ok();
     }
     
     [HttpDelete("{id}")]

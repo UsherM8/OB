@@ -91,6 +91,32 @@ export default {
         return apiClientJava.delete(`/api/users/${id}`);
     },
 
+    // Service endpoints (.NET backend)
+    getServiceById(id) {
+        return apiClientDotnet.get(`/api/Service/by-id/${id}`);
+    },
+
+    getAllServicesById(id) {
+        return apiClientDotnet.get(`/api/Service/Getallby-id/${id}`);
+    },
+
+    createService(serviceData) {
+        return apiClientDotnet.post('/api/Service', serviceData);
+    },
+
+    // Garage endpoints (.NET backend)
+    getGarageById(id) {
+        return apiClientDotnet.get(`/api/Garage/by-id/${id}`);
+    },
+
+    getAllGarages() {
+        return apiClientDotnet.get(`/api/Garage`);
+    },
+
+    createGarage(garageData) {
+        return apiClientDotnet.post(`/api/Garage`, garageData);
+    },
+
     // Authentication endpoints
     login(email, password) {
         return apiClientJava.post('/api/auth/login', { email, password });
@@ -108,3 +134,4 @@ export default {
         delete apiClientJava.defaults.headers.common['Authorization'];
     }
 };
+

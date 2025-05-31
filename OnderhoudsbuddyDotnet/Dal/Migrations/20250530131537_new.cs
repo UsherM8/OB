@@ -7,15 +7,29 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Dal.Migrations
 {
     /// <inheritdoc />
-    public partial class carfunction : Migration
+    public partial class @new : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "LicencePlate",
-                table: "Cars",
-                newName: "LicensePlate");
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Cars",
+                columns: table => new
+                {
+                    CarId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Mileage = table.Column<int>(type: "int", nullable: false),
+                    LicensePlate = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cars", x => x.CarId);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Garages",
@@ -54,11 +68,14 @@ namespace Dal.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CarId = table.Column<int>(type: "int", nullable: false),
                     GarageId = table.Column<int>(type: "int", nullable: false),
-                    ServiceType = table.Column<int>(type: "int", maxLength: 100, nullable: false),
-                    Status = table.Column<int>(type: "int", maxLength: 50, nullable: false),
+                    ServiceType = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     ServiceDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     NextServiceDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Description = table.Column<int>(type: "int", maxLength: 500, nullable: false)
+                    Description = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -86,6 +103,9 @@ namespace Dal.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Cars");
+
+            migrationBuilder.DropTable(
                 name: "Garages");
 
             migrationBuilder.DropTable(
@@ -93,11 +113,6 @@ namespace Dal.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserCars");
-
-            migrationBuilder.RenameColumn(
-                name: "LicensePlate",
-                table: "Cars",
-                newName: "LicencePlate");
         }
     }
 }

@@ -77,7 +77,7 @@ const handleSubmit = async () => {
 
     await api.addCar(carData, userId.value);
 
-    router.push('/my-cars');
+    router.push('/UserCar');
   } catch (error) {
     console.error('Fout bij toevoegen auto:', error);
     errorMessage.value = error.response?.data?.message || 'Er is een fout opgetreden bij het toevoegen van de auto';

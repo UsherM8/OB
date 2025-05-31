@@ -47,7 +47,7 @@ namespace OnderhoudsbuddyWeb.Controllers
             }
             var garage = GarageModelMapper.ToEntity(garageModel);
             await _garageContainer.CreateGarageAsync(garage);
-            return CreatedAtAction(nameof(GetGarageByIdAsync), new { id = garage.GarageId }, GarageModelMapper.ToModel(garage));
+            return Ok(garageModel);
         }
     }
 }

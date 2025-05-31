@@ -7,8 +7,8 @@ const loading = ref(false);
 const error = ref(null);
 
 const userId = ref(localStorage.getItem('userInfo')
-  ? JSON.parse(localStorage.getItem('userInfo')).id
-  : null);
+    ? JSON.parse(localStorage.getItem('userInfo')).id
+    : null);
 
 const fetchUserCars = async () => {
   loading.value = true;
@@ -21,9 +21,7 @@ const fetchUserCars = async () => {
   }
 
   try {
-    console.log('Auto\'s ophalen voor gebruiker:', userId.value);
     const response = await api.getUserCars(userId.value);
-    console.log('API response ontvangen:', response);
     cars.value = response.data;
   } catch (err) {
     console.error('Fout bij ophalen auto\'s:', err);
@@ -39,12 +37,10 @@ onMounted(() => {
 
 const formatDate = (dateString) => {
   if (!dateString) return '-';
-
   try {
     const year = dateString.substring(0, 4);
     const month = dateString.substring(4, 6);
     const day = dateString.substring(6, 8);
-
     return `${day}-${month}-${year}`;
   } catch {
     return dateString;
@@ -53,22 +49,17 @@ const formatDate = (dateString) => {
 
 const calculateCarAge = (dateString) => {
   if (!dateString) return '-';
-
   try {
     const year = parseInt(dateString.substring(0, 4));
     const month = parseInt(dateString.substring(4, 6)) - 1;
     const day = parseInt(dateString.substring(6, 8));
-
     const firstDate = new Date(year, month, day);
     const today = new Date();
-
     let age = today.getFullYear() - firstDate.getFullYear();
     const monthDiff = today.getMonth() - firstDate.getMonth();
-
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < firstDate.getDate())) {
       age--;
     }
-
     return `${age} jaar`;
   } catch {
     return '-';
@@ -107,59 +98,55 @@ const formatWeight = (weight) => {
     <div v-else class="cars-grid">
       <div v-for="car in cars" :key="car.carId" class="car-card">
         <div class="car-details">
-          <div class="license-plate">{{ car.licensePlate }}</div>
+          <div class="car-content">
+            <div class="license-plate">{{ car.licensePlate }}</div>
 
-          <div class="car-header">
-            <div class="brand-model">
-              {{ car.brand }} {{ car.tradeName }}
-            </div>
-            <div class="car-age">
-              {{ calculateCarAge(car.firstAdmissionDate) }}
-            </div>
-          </div>
-
-          <div class="car-specs">
-            <div class="spec-item">
-              <div class="spec-icon">🚗</div>
-              <div class="spec-text">{{ car.vehicleType }}</div>
-            </div>
-            <div class="spec-item">
-              <div class="spec-icon">🎨</div>
-              <div class="spec-text">{{ car.primaryColor }}</div>
-            </div>
-            <div class="spec-item">
-              <div class="spec-icon">📏</div>
-              <div class="spec-text">{{ formatMileage(car.mileage) }}</div>
-            </div>
-            <div class="spec-item">
-              <div class="spec-icon">⚖️</div>
-              <div class="spec-text">{{ formatWeight(car.emptyVehicleMass) }}</div>
-            </div>
-          </div>
-
-          <div class="info-grid">
-            <div class="info-item">
-              <span class="label">APK geldig tot:</span>
-              <span class="value">{{ formatDate(car.apkExpiryDate) }}</span>
+            <div class="car-header">
+              <div class="brand-model">{{ car.brand }} {{ car.tradeName }}</div>
+              <div class="car-age">{{ calculateCarAge(car.firstAdmissionDate) }}</div>
             </div>
 
-            <div class="info-item">
-              <span class="label">Eerste toelating:</span>
-              <span class="value">{{ formatDate(car.firstAdmissionDate) }}</span>
+            <div class="car-specs">
+              <div class="spec-item">
+                <div class="spec-icon">🚗</div>
+                <div class="spec-text">{{ car.vehicleType }}</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-icon">🎨</div>
+                <div class="spec-text">{{ car.primaryColor }}</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-icon">📏</div>
+                <div class="spec-text">{{ formatMileage(car.mileage) }}</div>
+              </div>
+              <div class="spec-item">
+                <div class="spec-icon">⚖️</div>
+                <div class="spec-text">{{ formatWeight(car.emptyVehicleMass) }}</div>
+              </div>
             </div>
 
-            <div class="info-item">
-              <span class="label">Kilometerstand oordeel:</span>
-              <span class="value">{{ car.mileageJudgment }}</span>
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="label">APK geldig tot:</span>
+                <span class="value">{{ formatDate(car.apkExpiryDate) }}</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Eerste toelating:</span>
+                <span class="value">{{ formatDate(car.firstAdmissionDate) }}</span>
+              </div>
+              <div class="info-item">
+                <span class="label">Kilometerstand oordeel:</span>
+                <span class="value">{{ car.mileageJudgment }}</span>
+              </div>
             </div>
           </div>
 
           <div class="car-actions">
-            <router-link :to="`/car-details/${car.carId}`" class="action-button details-button">
-              Details bekijken
+            <router-link :to="`/CarService/${car.carId}`" class="action-button details-button">
+              Onderhoud  historie bekijken
             </router-link>
-            <router-link :to="`/car-edit/${car.carId}`" class="action-button edit-button">
-              Bewerken
+            <router-link :to="`/AddService/${car.carId}`" class="action-button edit-button">
+              Onderhoud toevoegen
             </router-link>
           </div>
         </div>
@@ -167,7 +154,7 @@ const formatWeight = (weight) => {
     </div>
 
     <div class="add-car-container">
-      <router-link to="/search-car" class="add-car-button">
+      <router-link to="/CarRegister" class="add-car-button">
         <span class="add-icon">+</span> Auto toevoegen
       </router-link>
     </div>
@@ -180,6 +167,10 @@ const formatWeight = (weight) => {
   margin: 0 auto;
   padding: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   position: relative;
 }
 
@@ -187,10 +178,12 @@ h1 {
   color: black;
   border-bottom: 2px solid #eaeaea;
   padding-bottom: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
-.loading-indicator, .error-message, .no-cars {
+.loading-indicator,
+.error-message,
+.no-cars {
   text-align: center;
   padding: 30px;
   background-color: #f8f9fa;
@@ -225,26 +218,34 @@ h1 {
 }
 
 .cars-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 20px;
-  margin-bottom: 70px;
+  padding-bottom: 100px;
 }
 
 .car-card {
   background-color: white;
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  height: 520px;
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.car-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
 .car-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.car-content {
+  flex: 1;
+  overflow-y: auto;
   padding: 15px;
 }
 
@@ -339,7 +340,9 @@ h1 {
 .car-actions {
   display: flex;
   gap: 10px;
-  margin-top: 15px;
+  padding: 15px;
+  border-top: 1px solid #eee;
+  background-color: #fafafa;
 }
 
 .action-button {
@@ -377,7 +380,7 @@ h1 {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  z-index: 100;
+  z-index: 10;
 }
 
 .add-car-button {

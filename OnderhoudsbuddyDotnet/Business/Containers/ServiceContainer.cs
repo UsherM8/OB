@@ -2,10 +2,11 @@
 using Business.Classes;
 using Business.Mappers;
 using Domain.RepositoryInterfaces;
+using System.ComponentModel.Design;
 
 namespace Business.Containers
 {
-    public class ServiceContainer
+    public class ServiceContainer : ContainerInterfaces.IServiceContainer
     {
         private readonly IService _serviceRepository;
         public ServiceContainer(IService serviceRepository)
