@@ -37,7 +37,7 @@ onMounted(() => {
 
 <template>
   <div class="car-service-container">
-    <h2>Services voor auto #{{ carId }}</h2>
+    <h2>Services voor auto {{ carId }}</h2>
 
     <div v-if="loading" class="loading">Services worden geladen...</div>
     <div v-else-if="error" class="error">{{ error }}</div>

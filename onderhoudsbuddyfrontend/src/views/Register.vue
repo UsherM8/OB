@@ -31,7 +31,7 @@ const handleRegister = async () => {
       };
 
       await api.createUser(userData);
-      router.push('/');
+      router.push('/login');
 
     } catch (error) {
       console.error('Registratiefout:', error.message);
@@ -57,6 +57,7 @@ const handleRegister = async () => {
           <label for="firstName">Voornaam</label>
           <div class="input-container">
             <input
+                name="firstName"
                 id="firstName"
                 type="text"
                 v-model="firstName"
@@ -73,6 +74,7 @@ const handleRegister = async () => {
           <label for="lastName">Achternaam</label>
           <div class="input-container">
             <input
+                name="lastName"
                 id="lastName"
                 type="text"
                 v-model="lastName"
@@ -89,6 +91,7 @@ const handleRegister = async () => {
           <label for="birthDate">Geboortedatum</label>
           <div class="input-container">
             <input
+                name="birthDate"
                 id="birthDate"
                 type="date"
                 v-model="birthDate"
@@ -104,6 +107,7 @@ const handleRegister = async () => {
           <label for="email">E-mail</label>
           <div class="input-container">
             <input
+                name="email"
                 id="email"
                 type="email"
                 v-model="email"
@@ -120,6 +124,7 @@ const handleRegister = async () => {
           <label for="password">Wachtwoord</label>
           <div class="input-container">
             <input
+                name="password"
                 id="password"
                 :type="showPassword ? 'text' : 'password'"
                 v-model="password"

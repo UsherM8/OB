@@ -11,6 +11,7 @@
         <div class="form-group">
           <label for="email">E-mailadres</label>
           <input
+              name="email"
             id="email"
             type="email"
             v-model="email"
@@ -24,6 +25,7 @@
         <div class="form-group">
           <label for="password">Wachtwoord</label>
           <input
+              name="password"
             id="password"
             type="password"
             v-model="password"

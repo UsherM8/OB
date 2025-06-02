@@ -99,6 +99,7 @@ const handleSubmit = async () => {
       <div class="form-group">
         <label for="licensePlate">Kenteken:</label>
         <input
+            name="licensePlate"
           id="licensePlate"
           v-model="licensePlate"
           type="text"
@@ -110,6 +111,7 @@ const handleSubmit = async () => {
       <div class="form-group">
         <label for="mileage">Kilometerstand:</label>
         <input
+            name="mileage"
           id="mileage"
           v-model.number="mileage"
           type="number"
@@ -129,6 +131,7 @@ const handleSubmit = async () => {
         </button>
 
         <button
+            name="Toevoegen"
           type="submit"
           class="submit-button"
           :disabled="isLoading"
