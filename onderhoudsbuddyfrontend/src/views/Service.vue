@@ -51,7 +51,7 @@ onMounted(fetchData);
     <div v-if="error" class="error">{{ error }}</div>
     <div v-else-if="loading">Laden...</div>
     <div v-else-if="service && car && garage">
-      <h2> Onderhoud {{ car.brand }} {{ car.tradeName }} </h2>
+      <h2> Onderhoud {{ car.brand }} {{ car.tradeName }}ccccc </h2>
 
       <section>
         <h3>Onderhoud informatie</h3>

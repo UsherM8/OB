@@ -9,10 +9,13 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container
 builder.Services.AddControllers();
+
+// AutoMapper + Containers
+builder.Services.AddAutoMapper(typeof(CarMapper));
 builder.Services.AddScoped<ICar, CarRepository>();
 builder.Services.AddScoped<ICarContainer, CarContainer>();
-builder.Services.AddAutoMapper(typeof(CarMapper));
 
 builder.Services.AddScoped<IGarage, GarageRepository>();
 builder.Services.AddScoped<IGarageContainer, GarageContainer>();
@@ -22,36 +25,46 @@ builder.Services.AddScoped<IService, ServiceRepository>();
 builder.Services.AddScoped<IServiceContainer, ServiceContainer>();
 builder.Services.AddScoped<ServiceMapper>();
 
-builder.Services.AddEndpointsApiExplorer();
+// Select correct connection string based on environment
+var env = builder.Environment.EnvironmentName;
+Console.WriteLine($"Environment: {env}");
+
+var config = builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false)
+    .AddJsonFile($"appsettings.{env}.json", optional: true)
+    .Build();
+
+var connectionString = config.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<OnderhoudsbuddyDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+// Swagger + CORS
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+// External API
 builder.Services.AddHttpClient<RdwApiClient>(client =>
 {
     client.BaseAddress = new Uri("https://opendata.rdw.nl/resource/");
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(builder =>
-    {
-        builder.AllowAnyOrigin()  // In productie beperk je dit tot specifieke origins
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
-});
-builder.Services.AddDbContext<OnderhoudsbuddyDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
-
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+// Middlewares
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Test"))
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
