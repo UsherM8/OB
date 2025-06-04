@@ -59,7 +59,7 @@ export default {
     },
 
     deleteCar(id) {
-        return apiClientDotnet.delete(`/api/Car/${id}`);
+        return apiClientDotnet.delete(`np`);
     },
 
     getUserCars(userId) {

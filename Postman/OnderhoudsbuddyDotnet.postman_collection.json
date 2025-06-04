@@ -7,6 +7,44 @@
 	},
 	"item": [
 		{
+			"name": "CreateUser",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"John\",\r\n  \"lastName\": \"Wick\",\r\n  \"birthDate\": \"2004-04-08\",\r\n  \"email\": \"dummy@gmail.com\",\r\n  \"password\": \"securePassword123\",\r\n  \"type\": \"admin\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "CreateCar",
 			"request": {
 				"method": "POST",
@@ -125,6 +163,48 @@
 						"api",
 						"Car",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cleanupdotnet",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7259/api/test/cleanupdotnet",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7259",
+					"path": [
+						"api",
+						"test",
+						"cleanupdotnet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cleanuopjava",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/test/cleanupjava",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"test",
+						"cleanupjava"
 					]
 				}
 			},

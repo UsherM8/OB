@@ -31,12 +31,18 @@ public class CarRepository : ICar
     public async Task<CarDto?> GetCarByLicenseAsync(string licensePlate)
     {
         var car = await _context.Cars.FirstOrDefaultAsync(c => c.LicensePlate == licensePlate);
-        if (car == null) return null;
         var carDto = await _rdwApiClient.GetCarAsync(licensePlate);
         if (carDto == null) return null;
-        carDto.CarId = car.CarId;
-        carDto.Mileage = car.Mileage;
-        return carDto;
+        if (car == null)
+        {
+            return carDto;
+        }
+        else
+        {
+            carDto.CarId = car.CarId;
+            carDto.Mileage = car.Mileage;
+            return carDto;
+        }       
     }
 
     public async Task<CarDto?> GetCarForUserAsync(int userId, int carId)
