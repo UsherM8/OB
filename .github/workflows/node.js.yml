@@ -22,14 +22,15 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - run: |
-          cd OB/onderhoudsbuddyfrontend
+          cd onderhoudsbuddyfrontend
           npm ci
 
       - run: |
-          cd OB/onderhoudsbuddyfrontend
+          cd onderhoudsbuddyfrontend
           npm run build --if-present
 
       - run: |
-          cd OB/onderhoudsbuddyfrontend
+          cd onderhoudsbuddyfrontend
           npm test
+
 
