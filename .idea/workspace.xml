@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f7bdfe0f-a120-4667-a80a-2c6e4b9a9251" name="Changes" comment="" />
+    <list default="true" id="f7bdfe0f-a120-4667-a80a-2c6e4b9a9251" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/OnderhoudsbuddyJava/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OnderhoudsbuddyJava/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/OnderhoudsbuddyJava/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OnderhoudsbuddyJava/src/main/resources/application-test.properties" beforeDir="false" afterPath="$PROJECT_DIR$/OnderhoudsbuddyJava/src/main/resources/application-test.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OnderhoudsbuddyJava/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/OnderhoudsbuddyJava/src/main/resources/application.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,11 +41,26 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="OB" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="OB" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -56,7 +77,11 @@
       <option name="presentableId" value="Default" />
       <updated>1746281144745</updated>
       <workItem from="1746281145954" duration="6000" />
+      <workItem from="1749639303347" duration="524000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
