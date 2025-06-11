@@ -20,8 +20,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          cache-dependency-path: OB/onderhoudsbuddyfrontend/package-lock.json
 
       - run: |
           cd OB/onderhoudsbuddyfrontend
@@ -34,3 +32,4 @@ jobs:
       - run: |
           cd OB/onderhoudsbuddyfrontend
           npm test
+
