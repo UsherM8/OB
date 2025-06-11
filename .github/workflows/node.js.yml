@@ -1,5 +1,3 @@
-name: Node.js CI - OnderhoudsbuddyFrontend
-
 on:
   push:
     branches: [ "main" ]
@@ -15,29 +13,23 @@ jobs:
         node-version: [18.x, 20.x, 22.x]
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Debug: toon inhoud van directories
-        run: |
+      - run: |
           ls -la
           ls -la OB
           ls -la OB/onderhoudsbuddyfrontend
 
-      - name: Install dependencies
-        working-directory: OB/onderhoudsbuddyfrontend
+      - working-directory: OB/onderhoudsbuddyfrontend
         run: npm ci
 
-      - name: Build frontend
-        working-directory: OB/onderhoudsbuddyfrontend
+      - working-directory: OB/onderhoudsbuddyfrontend
         run: npm run build --if-present
 
-      - name: Run tests
-        working-directory: OB/onderhoudsbuddyfrontend
+      - working-directory: OB/onderhoudsbuddyfrontend
         run: npm test
