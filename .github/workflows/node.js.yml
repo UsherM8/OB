@@ -1,3 +1,5 @@
+name: Node.js CI - OnderhoudsbuddyFrontend
+
 on:
   push:
     branches: [ "main" ]
@@ -19,17 +21,16 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+          cache-dependency-path: OB/onderhoudsbuddyfrontend/package-lock.json
 
       - run: |
-          ls -la
-          ls -la OB
-          ls -la OB/onderhoudsbuddyfrontend
+          cd OB/onderhoudsbuddyfrontend
+          npm ci
 
-      - working-directory: OB/onderhoudsbuddyfrontend
-        run: npm ci
+      - run: |
+          cd OB/onderhoudsbuddyfrontend
+          npm run build --if-present
 
-      - working-directory: OB/onderhoudsbuddyfrontend
-        run: npm run build --if-present
-
-      - working-directory: OB/onderhoudsbuddyfrontend
-        run: npm test
+      - run: |
+          cd OB/onderhoudsbuddyfrontend
+          npm test
