@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -25,14 +24,20 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
+    - name: Debug: toon inhoud van directories
+      run: |
+        ls -la
+        ls -la OB
+        ls -la OB/onderhoudsbuddyfrontend
+
     - name: Install dependencies
-      working-directory: onderhoudsbuddyfrontend
+      working-directory: OB/onderhoudsbuddyfrontend
       run: npm ci
 
     - name: Build frontend
-      working-directory: onderhoudsbuddyfrontend
+      working-directory: OB/onderhoudsbuddyfrontend
       run: npm run build --if-present
 
     - name: Run tests
-      working-directory: onderhoudsbuddyfrontend
+      working-directory: OB/onderhoudsbuddyfrontend
       run: npm test
