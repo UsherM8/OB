@@ -20,17 +20,13 @@ namespace OnderhoudsbuddyWeb.Controllers
         [HttpPost("cleanupdotnet")]
         public async Task<IActionResult> Cleanup()
         {
-            if (_env.EnvironmentName == "Test")
-            {
+            
                 await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE `UserCars`");
                 await _context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE `Cars`");
 
                 await _context.SaveChangesAsync();
 
-                return Ok();
-            }
-
-            return Forbid();
+                return Ok();       
         }
     }
 }

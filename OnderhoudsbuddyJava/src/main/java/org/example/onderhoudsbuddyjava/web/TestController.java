@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/test")
-@Profile({"Test"})
 public class TestController {
 
     private final JdbcTemplate jdbcTemplate;
