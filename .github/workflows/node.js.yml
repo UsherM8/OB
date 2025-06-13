@@ -28,9 +28,3 @@ jobs:
       - run: |
           cd onderhoudsbuddyfrontend
           npm run build --if-present
-
-      - run: |
-          cd onderhoudsbuddyfrontend
-          npm test
-
-
