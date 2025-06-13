@@ -8,6 +8,48 @@
 	"item": [
 		{
 			"name": "CreateUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 404\", function () {",
+							"    pm.expect(pm.response.code).to.eql(404);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.all.keys('timestamp', 'status', 'error', 'path');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Status is a number and equals 404\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.status).to.be.a('number').and.to.equal(404);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Error message must be a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.error).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Error message should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -77,6 +119,53 @@
 		},
 		{
 			"name": "GetCarByLicense",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the presence of all required fields in the response\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.all.keys('carId', 'licensePlate', 'mileage', 'brand', 'tradeName', 'vehicleType', 'primaryColor', 'apkExpiryDate', 'emptyVehicleMass', 'registrationDate', 'firstAdmissionDate', 'mileageJudgment');",
+							"});",
+							"",
+							"",
+							"pm.test(\"License plate is in a valid format\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.licensePlate).to.exist;",
+							"    pm.expect(responseData.licensePlate).to.match(/^[A-Z0-9]{1,7}$/); // Adjust regex as per valid format requirements",
+							"});",
+							"",
+							"",
+							"pm.test(\"Mileage is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.have.property('mileage');",
+							"    pm.expect(responseData.mileage).to.be.a('number').and.to.be.at.least(0);",
+							"});",
+							"",
+							"",
+							"pm.test(\"APK expiry date is in a valid date format\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.apkExpiryDate).to.exist;",
+							"    pm.expect(responseData.apkExpiryDate).to.match(/^\\d{4}-\\d{2}-\\d{2}$/, \"APK expiry date should be in YYYY-MM-DD format\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -99,6 +188,71 @@
 		},
 		{
 			"name": "GetCarBydIdFull",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response contains the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.all.keys(",
+							"        'carId', ",
+							"        'licensePlate', ",
+							"        'mileage', ",
+							"        'brand', ",
+							"        'tradeName', ",
+							"        'vehicleType', ",
+							"        'primaryColor', ",
+							"        'apkExpiryDate', ",
+							"        'emptyVehicleMass', ",
+							"        'registrationDate', ",
+							"        'firstAdmissionDate', ",
+							"        'mileageJudgment'",
+							"    );",
+							"});",
+							"",
+							"",
+							"pm.test(\"Mileage is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.have.property('mileage').that.is.a('number').and.is.at.least(0);",
+							"});",
+							"",
+							"",
+							"pm.test(\"The license plate must be a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.have.property('licensePlate').that.is.a('string').and.has.lengthOf.at.least(1, \"Value should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Date fields must be in a valid date format\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    const dateFields = [",
+							"        responseData.apkExpiryDate,",
+							"        responseData.registrationDate,",
+							"        responseData.firstAdmissionDate",
+							"    ];",
+							"",
+							"    dateFields.forEach(dateField => {",
+							"        pm.expect(dateField).to.satisfy(date => {",
+							"            return !isNaN(Date.parse(date));",
+							"        }, \"Date field should be in a valid date format\");",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -121,6 +275,63 @@
 		},
 		{
 			"name": "GetCarById",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.all.keys(",
+							"        'carId', ",
+							"        'licensePlate', ",
+							"        'mileage', ",
+							"        'brand', ",
+							"        'tradeName', ",
+							"        'vehicleType', ",
+							"        'primaryColor', ",
+							"        'apkExpiryDate', ",
+							"        'emptyVehicleMass', ",
+							"        'registrationDate', ",
+							"        'firstAdmissionDate', ",
+							"        'mileageJudgment'",
+							"    );",
+							"});",
+							"",
+							"",
+							"pm.test(\"License plate is in a valid format\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.have.property('licensePlate');",
+							"    pm.expect(responseData.licensePlate).to.match(/^[A-Z0-9-]{1,7}$/); // Assuming a valid format for license plates",
+							"});",
+							"",
+							"",
+							"pm.test(\"Mileage is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.have.property('mileage').that.is.a('number').and.is.at.least(0);",
+							"});",
+							"",
+							"",
+							"pm.test(\"APK expiry date is in a valid date format\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.have.property('apkExpiryDate');",
+							"    pm.expect(responseData.apkExpiryDate).to.match(/^\\d{4}-\\d{2}-\\d{2}$/, \"APK expiry date should be in YYYY-MM-DD format\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -207,6 +418,14 @@
 						"cleanupjava"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
 			},
 			"response": []
 		}

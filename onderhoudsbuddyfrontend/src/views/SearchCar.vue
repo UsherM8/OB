@@ -1,9 +1,15 @@
 <script setup>
-import { ref } from 'vue';
 import api from './api.js';
+import { computed, ref } from 'vue';
+const rawLicensePlate = ref('');
 
+const licensePlate = computed({
+  get: () => rawLicensePlate.value,
+  set: (val) => {
+    rawLicensePlate.value = val.toUpperCase();
+  }
+});
 
-const licensePlate = ref('');
 const car = ref(null);
 const loading = ref(false);
 const error = ref(null);
@@ -17,6 +23,9 @@ const searchCar = async () => {
     return;
   }
 
+  // Force uppercase
+  licensePlate.value = licensePlate.value.trim().toUpperCase();
+
   loading.value = true;
   error.value = null;
   car.value = null;
@@ -26,16 +35,15 @@ const searchCar = async () => {
   console.log('API URL zal zijn:', `http://localhost:44393/api/Car/by-license/${licensePlate.value}`);
 
   try {
-    console.log('API aanroep starten...');
     const response = await api.getCarByLicense(licensePlate.value);
-    console.log('API response ontvangen:', response);
     car.value = response.data;
   } catch (err) {
-    console.error('Volledige foutgegevens:', err);
+    console.error('Fout bij ophalen van auto:', err);
   } finally {
     loading.value = false;
   }
 };
+
 
 const formatDate = (dateString) => {
   if (!dateString) return '-';
