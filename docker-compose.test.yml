@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  db1:
+    image: mysql:8.0
+    container_name: onderhoudsbuddy-mysql-java-test
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB1_NAME}
+      MYSQL_USER: ${DB1_USER}
+      MYSQL_PASSWORD: ${DB1_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB1_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data-java-test:/var/lib/mysql
+    networks:
+      - onderhoudsbuddy-net
+
+  db2:
+    image: mysql:8.0
+    container_name: onderhoudsbuddy-mysql-dotnet-test
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB2_NAME}
+      MYSQL_USER: ${DB2_USER}
+      MYSQL_PASSWORD: ${DB2_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB2_PASSWORD}
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql-data-dotnet-test:/var/lib/mysql
+    networks:
+      - onderhoudsbuddy-net
+
+  java-backend:
+    build:
+      context: ./OB/onderhoudsbuddyjava
+    container_name: onderhoudsbuddy-java-test
+    depends_on:
+      - db1
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db1:3306/${DB1_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB1_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB1_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE}
+    ports:
+      - "8082:8080"
+    networks:
+      - onderhoudsbuddy-net
+
+  dotnet-backend:
+    build:
+      context: ./OB/onderhoudsbuddyDotnet
+    container_name: onderhoudsbuddy-dotnet
+    depends_on:
+      - db2
+    environment:
+      DOTNET_CONNECTIONSTRING: Server=db2;Port=3306;Database=${DB2_NAME};User=${DB2_USER};Password=${DB2_PASSWORD};
+      ASPNETCORE_ENVIRONMENT: Dockert
+    ports:
+      - "8081:8080"
+    networks:
+      - onderhoudsbuddy-net
+
+volumes:
+  mysql-data-java-test:
+  mysql-data-dotnet-test:
+
+networks:
+  onderhoudsbuddy-net:
